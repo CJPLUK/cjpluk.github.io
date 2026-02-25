@@ -11,8 +11,7 @@
     "tags": [
       "Automation",
       "Agents",
-      "Playwright",
-      "Cangjie"
+      "Playwright"
     ]
   },
   {
@@ -27,8 +26,7 @@
       "Automation",
       "Runtime Systems",
       "Language Semantics",
-      "Programming Models",
-      "Cangjie"
+      "Programming Models"
     ]
   },
   {
@@ -43,8 +41,7 @@
     "tags": [
       "Tutorial",
       "OpenHarmony OS",
-      "Oniro OS",
-      "Cangjie"
+      "Oniro OS"
     ]
   },
   {
@@ -57,8 +54,54 @@
     "description": "A Cursor extension that automatically injects Cangjie-specific context, toolchain conventions, and Context7 MCP documentation into AI prompts to improve code understanding and generation",
     "tags": [
       "Cursor",
-      "Extensions",
-      "Cangjie"
+      "Extensions"
+    ]
+  },
+  {
+    "name": "Contract Mechanism Design in Cangjie and LLM Code Generation",
+    "repoLink": "",
+    "authors": [
+      "Bohua Zhan"
+    ],
+    "date": "16/02/2026",
+    "description": "How can contracts improve LLM-generated code quality? Dr. Bohua Zhan from Huawei 2012 Programming Language Lab presents groundbreaking research on integrating Design by Contract principles with large language model code generation using the Cangjie programming language.",
+    "descriptionVideo": "https://www.youtube.com/watch?v=jvPmcEIelSU",
+    "tags": [
+      "Contracts",
+      "LLM",
+      "Code Generation",
+      "Testing",
+      "Research"
+    ]
+  },
+  {
+    "name": "Cangjie Workshop #41: Effect Handlers & Distributed Actor Framework",
+    "slug": "Cangjie Workshop 41 Effect Handlers and Distributed Actor Framework",
+    "repoLink": "",
+    "authors": [
+      "Magnus Morton",
+      "Steven Cheung",
+      "Jingrun Wu"
+    ],
+    "date": "12/02/2026",
+    "description": "In this session, researchers from Huawei's Programming Language Lab in Edinburgh share cutting-edge features for concurrent and distributed programming in Cangjie.",
+    "descriptionVideo": "https://www.youtube.com/watch?v=jGr-s9ABHRA",
+    "tags": [
+      "Effect Handlers",
+      "Distributed Systems",
+      "Actors",
+      "Workshop"
+    ]
+  },
+  {
+    "name": "Cangjie Programming 101 English Digital Textbook",
+    "repoLink": "https://e.huawei.com/en/talent/ict-academy/#/ict-courses-detail?courseId=fvXQlvE-whPqVon6TmjmbXFGBmk",
+    "authors": ["Jianbiao He","Xuezhi Wang"],
+    "date": "11/02/2026",
+    "description": "Exciting news for the global developer community! The official English edition of the Cangjie Programming digital textbook is now live on Huawei ICT Academy.",
+    "descriptionImage": "figures/Cangjie Programming.jpg",
+    "tags": [
+      "Tutorial"
     ]
   }
 ]

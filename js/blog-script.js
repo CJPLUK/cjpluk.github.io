@@ -118,7 +118,36 @@ class BlogWebsite
         if (!response.ok) throw new Error(`Blog ${this.blogSlug}.html: ${response.status}`) ;
         const text = await response.text() ;
         blogContent.innerHTML = text ;
+        this.embedYouTubeVideoLinks(blogContent) ;
         this.wrapBlogImages(blogContent) ;
+    }
+
+    getYouTubeVideoId(url)
+    {
+        if (!url || typeof url !== "string") return "" ;
+        const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/) ;
+        return m ? m[1] : "" ;
+    }
+
+    embedYouTubeVideoLinks(container)
+    {
+        if (!container) return ;
+        const links = container.querySelectorAll('a[href*="youtube.com"], a[href*="youtu.be"]') ;
+        const seen = new Set() ;
+        links.forEach((a) => {
+            const videoId = this.getYouTubeVideoId(a.href) ;
+            if (!videoId) return ;
+            const block = a.closest("p") ;
+            if (!block || seen.has(block)) return ;
+            const text = (block.textContent || "").toLowerCase() ;
+            if (!text.includes("video link") && !text.includes("video link:")) return ;
+            seen.add(block) ;
+            const embedUrl = `https://www.youtube.com/embed/${videoId}` ;
+            const embed = document.createElement("div") ;
+            embed.className = "blog-youtube-embed" ;
+            embed.innerHTML = `<div class="blog-youtube-embed-inner"><iframe src="${embedUrl}" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>` ;
+            block.parentNode.replaceChild(embed, block) ;
+        }) ;
     }
 
     wrapBlogImages(container)

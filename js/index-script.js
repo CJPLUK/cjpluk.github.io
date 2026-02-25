@@ -7,6 +7,12 @@ let showingAll = false
 let activeTag = null
 const INITIAL_DISPLAY_COUNT = 6
 
+function getYouTubeVideoId(url) {
+    if (!url || typeof url !== "string") return ""
+    const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
+    return m ? m[1] : ""
+}
+
 function formatDateForDisplay(dmy)
 {
     if (!dmy || typeof dmy !== "string") return ""
@@ -56,15 +62,51 @@ function displaySingleProject(project, projectsContainer)
 
     const tags = Array.isArray(project.tags) ? project.tags : []
     const description = project.description || ""
+    const descriptionImage = project.descriptionImage || ""
+    const descriptionVideo = project.descriptionVideo || ""
     const dateStr = project.date ? formatDateForDisplay(project.date) : ""
+
+    const videoId = getYouTubeVideoId(descriptionVideo)
+    const videoTitle = (project.name || "").length > 55 ? (project.name || "").substring(0, 52) + "..." : (project.name || "")
+    const videoDesc = (description || "").length > 90 ? (description || "").substring(0, 87) + "..." : (description || "")
+
+    const descriptionBlock = (description || descriptionImage)
+        ? `<div class="project-summary${descriptionImage ? " project-summary-with-image" : ""}">${description ? `<p class="project-summary-text">${description}</p>` : ""}${descriptionImage ? `<div class="project-summary-thumb"><img src="${descriptionImage}" alt="${description || project.name}" loading="lazy"></div>` : ""}</div>`
+        : ""
+
+    const videoBlock = videoId
+        ? `<div class="project-video-preview" data-video-id="${videoId}" role="button" tabindex="0">
+            <div class="project-video-thumb"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt=""><span class="project-video-play" aria-hidden="true"></span></div>
+            <div class="project-video-meta"><span class="project-video-source">youtube.com</span><strong class="project-video-title">${videoTitle.replace(/</g, "&lt;")}</strong><span class="project-video-desc">${videoDesc.replace(/</g, "&lt;")}</span></div>
+          </div>`
+        : ""
 
     projectCard.innerHTML = `
     <h3>${project.name}</h3>
     ${dateStr ? `<p class="project-date">${dateStr}</p>` : ""}
-    ${description ? `<p class="project-summary">${description}</p>` : ""}
+    ${descriptionBlock}
+    ${videoBlock}
     ${tags.length ? `<div class="project-tags">${tags.map(t => `<span class="tag">${t}</span>`).join(" ")}</div>` : ""}
     `
     projectsContainer.appendChild(projectCard)
+
+    if (videoId) {
+        const preview = projectCard.querySelector(".project-video-preview")
+        if (preview && !preview.classList.contains("project-video-playing")) {
+            const playInline = (e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                if (preview.classList.contains("project-video-playing")) return
+                preview.classList.add("project-video-playing")
+                preview.removeAttribute("role")
+                preview.removeAttribute("tabindex")
+                const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`
+                preview.innerHTML = `<div class="project-video-embed"><iframe src="${embedUrl}" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe><span class="project-video-from">From youtube.com</span></div>`
+            }
+            preview.addEventListener("click", playInline)
+            preview.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); playInline(e) } })
+        }
+    }
 }
 
 function displayProjects()
