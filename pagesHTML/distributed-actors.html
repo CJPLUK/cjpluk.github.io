@@ -1,0 +1,111 @@
+<h1 id="distributed-actors">Distributed actors</h1>
+<p>Distributed actors extend the Actor model from a single process to multiple nodes. In the Cangjie ecosystem, the <a href="https://gitcode.com/Cangjie-SIG/distributed-actors-cj"><code>distributed-actors-cj</code></a> project provides a framework to build actor-based systems where components communicate through asynchronous messages, run locally or remotely, and scale across machines.</p>
+<p>The framework combines:</p>
+<p>A core actor programming model with async calls and futures, distributed actor interfaces and proxies for remote invocation, a TCP-based actor system with cluster support for multi-node deployment and actor placement, and optional MCP integration so actor receivers can be exposed as tools for AI agents.</p>
+<p>This makes distributed actors a good fit for stateful services, concurrent business workflows, and cloud-native applications that need clear isolation, resilience, and horizontal scalability.</p>
+<h2 id="clustering">Clustering</h2>
+<p>Clustering lets multiple actor system nodes work as one logical runtime.</p>
+<p>The TCPCluster provides a cluster-based distributed actor system that allows you to spawn, manage, and communicate with distributed actors across multiple worker nodes. The cluster consists of a head server that coordinates actor placement and multiple worker nodes that host the actual actors.</p>
+<p>A TCPCluster consists of:</p>
+<ul>
+<li><strong>Head Server</strong>: A central coordinator that manages actor registration, placement, and lookup across the cluster</li>
+<li><strong>Worker Nodes</strong>: Multiple nodes that host and execute distributed actors</li>
+<li><strong>Client Nodes</strong>: Optional nodes that can join the cluster to spawn and interact with actors without hosting them</li>
+</ul>
+<p>The following diagram illustrates the cluster architecture:</p>
+<pre class="shiki light-plus" style="background-color: #FFFFFF"><code><span class="line"><span style="color: #000000">graph TB</span></span>
+<span class="line"><span style="color: #000000">    subgraph "Client Nodes"</span></span>
+<span class="line"><span style="color: #000000">        C1[Client Node 1]</span></span>
+<span class="line"><span style="color: #000000">        C2[Client Node 2]</span></span>
+<span class="line"><span style="color: #000000">    end</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">    subgraph "TCPCluster"</span></span>
+<span class="line"><span style="color: #000000">        HS[Head Server&#x3C;br/>Coordinates Actor Placement]</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">        subgraph "Worker Nodes"</span></span>
+<span class="line"><span style="color: #000000">            W1[Worker Node 1&#x3C;br/>Hosts Actors]</span></span>
+<span class="line"><span style="color: #000000">            W2[Worker Node 2&#x3C;br/>Hosts Actors]</span></span>
+<span class="line"><span style="color: #000000">            W3[Worker Node 3&#x3C;br/>Hosts Actors]</span></span>
+<span class="line"><span style="color: #000000">        end</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">        subgraph "Actors"</span></span>
+<span class="line"><span style="color: #000000">            A1(Actor: alice)</span></span>
+<span class="line"><span style="color: #000000">            A2(Actor: bob)</span></span>
+<span class="line"><span style="color: #000000">            A3(Actor: charlie)</span></span>
+<span class="line"><span style="color: #000000">        end</span></span>
+<span class="line"><span style="color: #000000">    end</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">    HS -->|Manages| W1</span></span>
+<span class="line"><span style="color: #000000">    HS -->|Manages| W2</span></span>
+<span class="line"><span style="color: #000000">    HS -->|Manages| W3</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">    C1 -->|Spawn/Lookup| HS</span></span>
+<span class="line"><span style="color: #000000">    C2 -->|Spawn/Lookup| HS</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">    W1 -.->|Hosts| A1</span></span>
+<span class="line"><span style="color: #000000">    W2 -.->|Hosts| A2</span></span>
+<span class="line"><span style="color: #000000">    W3 -.->|Hosts| A3</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">    C1 -->|Communicate| A1</span></span>
+<span class="line"><span style="color: #000000">    C1 -->|Communicate| A2</span></span>
+<span class="line"><span style="color: #000000">    C2 -->|Communicate| A3</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">    style HS fill:#e1f5ff</span></span>
+<span class="line"><span style="color: #000000">    style W1 fill:#fff4e1</span></span>
+<span class="line"><span style="color: #000000">    style W2 fill:#fff4e1</span></span>
+<span class="line"><span style="color: #000000">    style W3 fill:#fff4e1</span></span>
+<span class="line"><span style="color: #000000">    style C1 fill:#e8f5e9</span></span>
+<span class="line"><span style="color: #000000">    style C2 fill:#e8f5e9</span></span>
+<span class="line"><span style="color: #000000">    style A1 fill:#f3e5f5</span></span>
+<span class="line"><span style="color: #000000">    style A2 fill:#f3e5f5</span></span>
+<span class="line"><span style="color: #000000">    style A3 fill:#f3e5f5</span></span></code></pre>
+<h2 id="mcp-integration">MCP integration</h2>
+<p>MCP integration connects distributed actors to AI agents by exposing actor receivers as callable tools through the Model Context Protocol. In practice, the actor system remains the source of truth for business logic, while MCP provides a standard interface that an agent can discover and invoke. This means an agent can request operations such as account transfer, room creation, or status lookup, and those requests are translated into actor receiver calls over the existing distributed actor infrastructure.</p>
+<p>In the <code>distributed-actors-cj</code> workflow, this is typically done by creating an <code>ActorToolManager</code>, adding one or more <code>TCPActorClient</code> connections, and letting the tool manager surface compatible actor receivers as tools. MCP integration does not require a cluster: it can work with a single TCP actor host and client. If a cluster is present, the same MCP layer can call actors hosted through the cluster as well. This architecture keeps AI orchestration separate from stateful backend execution and allows the same actor services to be reused by both application code and agent-based clients.</p>
+<pre class="shiki light-plus" style="background-color: #FFFFFF"><code><span class="line"><span style="color: #000000">flowchart LR</span></span>
+<span class="line"><span style="color: #000000">    AG[AI Agent] -->|MCP tool call| TM[ActorToolManager]</span></span>
+<span class="line"><span style="color: #000000">    TM -->|dispatch| TC[TCPActorClient]</span></span>
+<span class="line"><span style="color: #000000">    TC -->|call receiver| AH[TCP Actor Host]</span></span>
+<span class="line"><span style="color: #000000">    AH -->|receiver execution| AC(Distributed Actor)</span></span>
+<span class="line"><span style="color: #000000">    AC -->|result| AG</span></span></code></pre>
+<pre class="shiki light-plus" style="background-color: #FFFFFF"><code><span class="line"><span style="color: #AF00DB">let</span><span style="color: #001080"> toolManager</span><span style="color: #000000"> = </span><span style="color: #795E26">ActorToolManager</span><span style="color: #000000">()</span></span>
+<span class="line"><span style="color: #AF00DB">let</span><span style="color: #001080"> tcpClient</span><span style="color: #000000"> = </span><span style="color: #001080">TCPActorClient</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">"localhost"</span><span style="color: #000000">, </span><span style="color: #098658">8080</span><span style="color: #000000">)</span></span>
+<span class="line"><span style="color: #001080">toolManager</span><span style="color: #000000">.</span><span style="color: #795E26">addActorClient</span><span style="color: #000000">(</span><span style="color: #001080">tcpClient</span><span style="color: #000000">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #008000">// Agent-side calls are routed to actor receivers exposed as MCP tools.</span></span></code></pre>
+<h2 id="chat-room-server-example">Chat room server example</h2>
+<p>The chat room example in <code>distributed-actors-cj</code> is implemented in <code>examples/chat-application-example</code>. It uses a head server and worker nodes for clustering, and each client joins the cluster and also hosts a local <code>UserActorImpl</code> endpoint so it can receive pushed chat messages.</p>
+<p>A room is represented by <code>ChatRoomActor</code>, which is spawnable and created with <code>TCPCluster.spawnActor&#x3C;ChatRoomActor>(...)</code> when a user runs <code>open &#x3C;room></code>. When a user runs <code>join &#x3C;room></code>, the client looks up the room actor with <code>TCPCluster.getActor&#x3C;ChatRoomActor>(...)</code> and registers its user actor via <code>joinRoom(userId, user)</code>. Sending text uses <code>sendMessage(userId, message, tell: True)</code>, and the room actor broadcasts by iterating stored <code>UserActor</code> proxies and calling <code>receiveMessage</code> on each one. The client-side <code>UserActorImpl</code> prints incoming messages and ignores messages sent by itself.</p>
+<pre class="shiki light-plus" style="background-color: #FFFFFF"><code><span class="line"><span style="color: #000000">graph TB</span></span>
+<span class="line"><span style="color: #000000">    subgraph "Chat clients"</span></span>
+<span class="line"><span style="color: #000000">        subgraph CH1["Client A"]</span></span>
+<span class="line"><span style="color: #000000">            UH1(UserActor: alice)</span></span>
+<span class="line"><span style="color: #000000">        end</span></span>
+<span class="line"><span style="color: #000000">    end</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">    subgraph "Chat room server"</span></span>
+<span class="line"><span style="color: #000000">        HA[Head Server]</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">        subgraph "Worker Nodes"</span></span>
+<span class="line"><span style="color: #000000">            WK1[Worker Node 1]</span></span>
+<span class="line"><span style="color: #000000">        end</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">        subgraph "Chat Actors"</span></span>
+<span class="line"><span style="color: #000000">            R1(ChatRoomActor: room-1)</span></span>
+<span class="line"><span style="color: #000000">        end</span></span>
+<span class="line"><span style="color: #000000">    end</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">    CH1 -->|open/join via TCPCluster| HA</span></span>
+<span class="line"><span style="color: #000000">    HA -->|place/lookup| WK1</span></span>
+<span class="line"><span style="color: #000000">    WK1 -.->|hosts| R1</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">    UH1 -->|sendMessage| R1</span></span>
+<span class="line"><span style="color: #000000">    R1 -->|receiveMessage| UH1</span></span>
+<span class="line"><span style="color: #000000"></span></span>
+<span class="line"><span style="color: #000000">    style HA fill:#e1f5ff</span></span>
+<span class="line"><span style="color: #000000">    style WK1 fill:#fff4e1</span></span>
+<span class="line"><span style="color: #000000">    style CH1 fill:#e8f5e9</span></span>
+<span class="line"><span style="color: #000000">    style UH1 fill:#f3e5f5</span></span>
+<span class="line"><span style="color: #000000">    style R1 fill:#f3e5f5</span></span></code></pre>
+<p>For this application, the main advantage of using an actor cluster is that each chat room has a clear ownership boundary: room membership and broadcast state live inside one <code>ChatRoomActor</code>, and all updates are serialized through actor receivers. That avoids explicit lock management for room data and makes concurrent joins, leaves, and messages easier to reason about. Clustering also provides location transparency, so clients can keep using the same proxy calls even if a room actor is placed on a different worker node, which simplifies horizontal scaling as room count and traffic grow.</p>
+<p>Without actors, the same chat server is usually built around shared in-memory maps, manual synchronization, and connection registries spread across threads or event loops. That can work, but correctness depends on careful coordination of locks, lifecycle cleanup, and message fan-out ordering under load. Scaling across nodes then requires adding extra routing and discovery layers to answer where a room lives and how to deliver to connected users. In the actor-cluster design, those concerns are pushed into actor isolation and cluster placement/lookup, so application code stays closer to chat-domain logic instead of infrastructure plumbing.</p>

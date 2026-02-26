@@ -1,0 +1,133 @@
+<h1 id="effect-handlers">Effect Handlers</h1>
+<p>Here in the UK team for Cangjie, one of the big themes underpinning our work is <em>effect handlers</em>.</p>
+<h2 id="where-they-come-from">Where they come from?</h2>
+<p><em>Effect handlers</em> have emerged as a powerful, modular abstraction for managing side effects in mostly functional programming languages.
+They originate from the theory of algebraic effects developed by Gordon Plotkin and John Power in the early 2000s as a more convenient way to deal with
+side effects in functional code without resorting to monad transformers.</p>
+<h2 id="effect-handlers-in-cangjie">Effect Handlers in Cangjie</h2>
+<p>Before the Cangjie programming language, <em>effect handlers</em> were only found in functional-style programming languages, many of which were bespoke research projects.
+Although the Cangjie programming language is not purely functional, we believe that <em>effect handlers</em> have a place in multi-paradigm general purpose languages, just like how other ideas from functional programming have influenced mainstream languages (such as closures, algebraic data types, lazy evaluation...).
+<em>Effect handlers</em> are an upcoming experimental feature in Cangjie, but you can try it now using the <a href="">build</a> of our <a href="">fork of the Cangjie SDK</a>.
+If you are involved with a research project involving <em>effect handlers</em> are are interested in using Cangjie, feel free to <a href="">reach out to us</a>!
+To see it in action, check out the <a href="">tutorial</a>.</p>
+<h2 id="effect-handler-use-cases">Effect Handler Use Cases</h2>
+<p><em>Effect handlers</em>, as a programming language feature, is certainly not widespread.
+Here are ways to use them to inspire your next <em>effect</em>ful program.</p>
+<h3 id="avoid-prop-drilling">Avoid Prop Drilling</h3>
+<p>Sometimes a large section of your code operates operates with some shared context:
+there is some dynamic[^1] functionality that you depend on, requiring you to pass around a classic context object <code>ctx</code> to every other function.
+Maybe you even end up having copies of this context object across different objects just to make sure that the relevant method has access to this context (e.g. the <code>.next()</code> method of an iterator does not take any context argument).</p>
+<p>To sidestep this, you could just create a global variable for the context data, but the 60s called and is trying to sell you a COBOL support contract...
+but seriously, this would throw a spanner in the works of any future attempts to refactor into parallel workloads, and clarity takes a real hit when shared mutable data can be referenced all across the codebase.</p>
+<table>
+<tbody><tr>
+<td valign="top">
+<pre class="shiki light-plus" style="background-color: #FFFFFF"><code><span class="line"><span style="color: #AF00DB">var</span><span style="color: #001080"> count</span><span style="color: #000000"> = </span><span style="color: #098658">0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #AF00DB">func</span><span style="color: #795E26"> foo</span><span style="color: #000000">() {</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #008000">// count event</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #001080">count</span><span style="color: #000000">++</span></span>
+<span class="line"><span style="color: #000000">}</span></span></code></pre>
+</td>
+<td valign="top">
+<pre class="shiki light-plus" style="background-color: #FFFFFF"><code><span class="line"><span style="color: #AF00DB">func</span><span style="color: #795E26"> crash</span><span style="color: #000000">() {</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #008000">// report current count</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #008000">// and reset</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #795E26">println</span><span style="color: #000000">(</span><span style="color: #001080">count</span><span style="color: #000000">)</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #001080">count</span><span style="color: #000000"> = </span><span style="color: #098658">0</span></span>
+<span class="line"><span style="color: #000000">}</span></span></code></pre>
+</td>
+<td valign="top">
+<pre class="shiki light-plus" style="background-color: #FFFFFF"><code><span class="line"><span style="color: #AF00DB">func</span><span style="color: #795E26"> bar</span><span style="color: #000000">() {</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #008000">// report current count</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #008000">// and do not reset</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #795E26">println</span><span style="color: #000000">(</span><span style="color: #001080">count</span><span style="color: #000000">)</span></span>
+<span class="line"><span style="color: #000000">}</span></span></code></pre>
+</td>
+</tr>
+</tbody></table>
+<p>For the above example, understanding the usage of the variable <code>count</code> relies on finding all its references.
+In order to maintain locality of behaviour, we may write something like the following with <strong>effect handlers</strong> in Cangjie:</p>
+<table>
+<tbody><tr>
+<td valign="top">
+<pre class="shiki light-plus" style="background-color: #FFFFFF"><code><span class="line"><span style="color: #AF00DB">func</span><span style="color: #795E26"> scope</span><span style="color: #000000">() {</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #AF00DB">let</span><span style="color: #001080"> count</span><span style="color: #000000"> = </span><span style="color: #795E26">Box</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">)</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #AF00DB">try</span><span style="color: #000000"> {</span></span>
+<span class="line"><span style="color: #000000">        </span><span style="color: #795E26">crash</span><span style="color: #000000">()</span></span>
+<span class="line"><span style="color: #000000">        </span><span style="color: #795E26">bar</span><span style="color: #000000">()</span></span>
+<span class="line"><span style="color: #000000">    } </span><span style="color: #795E26">handle</span><span style="color: #000000"> (</span><span style="color: #001080">add</span><span style="color: #000000">: </span><span style="color: #267F99">Add</span><span style="color: #000000">) {</span></span>
+<span class="line"><span style="color: #000000">        </span><span style="color: #001080">count</span><span style="color: #000000">.</span><span style="color: #001080">value</span><span style="color: #000000"> += </span><span style="color: #001080">add</span><span style="color: #000000">.</span><span style="color: #001080">number</span></span>
+<span class="line"><span style="color: #000000">        </span><span style="color: #001080">resume</span></span>
+<span class="line"><span style="color: #000000">    } </span><span style="color: #795E26">handle</span><span style="color: #000000"> (</span><span style="color: #001080">comp</span><span style="color: #000000">: </span><span style="color: #267F99">Complete</span><span style="color: #000000">) {</span></span>
+<span class="line"><span style="color: #000000">        </span><span style="color: #008000">// subtask complete, do</span></span>
+<span class="line"><span style="color: #000000">        </span><span style="color: #008000">// relevant cataloguing</span></span>
+<span class="line"><span style="color: #000000">        </span><span style="color: #008000">// then reset</span></span>
+<span class="line"><span style="color: #000000">        </span><span style="color: #001080">count</span><span style="color: #000000">.</span><span style="color: #001080">value</span><span style="color: #000000"> = </span><span style="color: #098658">0</span></span>
+<span class="line"><span style="color: #000000">        </span><span style="color: #001080">resume</span></span>
+<span class="line"><span style="color: #000000">    } </span><span style="color: #795E26">handle</span><span style="color: #000000"> (</span><span style="color: #001080">_</span><span style="color: #000000">: </span><span style="color: #267F99">SeeCount</span><span style="color: #000000">) {</span></span>
+<span class="line"><span style="color: #000000">        </span><span style="color: #001080">resume</span><span style="color: #000000"> </span><span style="color: #001080">with</span><span style="color: #000000"> </span><span style="color: #001080">count</span><span style="color: #000000">.</span><span style="color: #001080">value</span></span>
+<span class="line"><span style="color: #000000">    }</span></span>
+<span class="line"><span style="color: #000000">}</span></span></code></pre>
+</td>
+<td valign="top">
+<pre class="shiki light-plus" style="background-color: #FFFFFF"><code><span class="line"><span style="color: #AF00DB">func</span><span style="color: #795E26"> crash</span><span style="color: #000000">() {</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #001080">perform</span><span style="color: #000000"> </span><span style="color: #795E26">Add</span><span style="color: #000000">(</span><span style="color: #098658">5</span><span style="color: #000000">)</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #001080">perform</span><span style="color: #000000"> </span><span style="color: #795E26">Complete</span><span style="color: #000000">()</span></span>
+<span class="line"><span style="color: #000000">}</span></span></code></pre>
+</td>
+<td valign="top">
+<pre class="shiki light-plus" style="background-color: #FFFFFF"><code><span class="line"><span style="color: #AF00DB">func</span><span style="color: #795E26"> bar</span><span style="color: #000000">() {</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #008000">// report current count</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #008000">// and do not reset</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #795E26">println</span><span style="color: #000000">(</span><span style="color: #001080">perform</span><span style="color: #000000"> </span><span style="color: #795E26">SeeCount</span><span style="color: #000000">())</span></span>
+<span class="line"><span style="color: #000000">}</span></span></code></pre>
+</td>
+</tr>
+</tbody></table>
+<p>[^1] ... so you cannot just define plain functions exposed by a module</p>
+<h3 id="scoped-event-handling">Scoped Event Handling</h3>
+<p>You could pass objects around who's methods are used to trigger/handle "events". But leftover references to these objects could unintentionally allow the program to emit these events well after the intended scope.</p>
+<p>Instead use effects for these events:</p>
+<pre class="shiki light-plus" style="background-color: #FFFFFF"><code><span class="line"><span style="color: #AF00DB">try</span><span style="color: #000000"> {</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #008000">// ...</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #001080">perform</span><span style="color: #000000"> </span><span style="color: #795E26">Event</span><span style="color: #000000">()</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #008000">// ...</span></span>
+<span class="line"><span style="color: #000000">} </span><span style="color: #795E26">handle</span><span style="color: #000000"> (</span><span style="color: #001080">e</span><span style="color: #000000">: </span><span style="color: #267F99">Event</span><span style="color: #000000">) {</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #008000">// handle event</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #008000">/* ok */</span><span style="color: #000000">) {</span></span>
+<span class="line"><span style="color: #000000">        </span><span style="color: #001080">resume</span></span>
+<span class="line"><span style="color: #000000">    }</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #008000">// Don't resume in problematic case</span></span>
+<span class="line"><span style="color: #000000">}</span></span></code></pre>
+<h3 id="pausable-coroutines">Pausable Coroutines</h3>
+<p>The <code>handle</code> clause can contain an explicit <code>Resumption</code> object. We call these "deferred handlers". This allows you to hold a resumption aside to resume (or not) later outside of the handler.</p>
+<pre class="shiki light-plus" style="background-color: #FFFFFF"><code><span class="line"><span style="color: #AF00DB">let</span><span style="color: #001080"> continuation</span><span style="color: #000000">: </span><span style="color: #267F99">Box</span><span style="color: #000000">&#x3C;?</span><span style="color: #267F99">Resumption</span><span style="color: #000000">&#x3C;</span><span style="color: #267F99">Val</span><span style="color: #000000">, </span><span style="color: #AF00DB">Unit</span><span style="color: #000000">>> = </span><span style="color: #795E26">Box</span><span style="color: #000000">(</span><span style="color: #001080">None</span><span style="color: #000000">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #AF00DB">try</span><span style="color: #000000"> {</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #AF00DB">try</span><span style="color: #000000"> {</span></span>
+<span class="line"><span style="color: #000000">        </span><span style="color: #008000">// stuff</span></span>
+<span class="line"><span style="color: #000000">    } </span><span style="color: #795E26">handle</span><span style="color: #000000"> (</span><span style="color: #001080">r</span><span style="color: #000000">: </span><span style="color: #267F99">Request</span><span style="color: #000000">) {</span></span>
+<span class="line"><span style="color: #000000">        </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #008000">/* can deal with request */</span><span style="color: #000000">) {</span></span>
+<span class="line"><span style="color: #000000">            </span><span style="color: #001080">resume</span><span style="color: #000000"> </span><span style="color: #001080">with</span><span style="color: #000000"> </span><span style="color: #001080">value</span></span>
+<span class="line"><span style="color: #000000">        } </span><span style="color: #AF00DB">else</span><span style="color: #000000"> {</span></span>
+<span class="line"><span style="color: #000000">            </span><span style="color: #001080">perform</span><span style="color: #000000"> </span><span style="color: #795E26">Pause</span><span style="color: #000000">()</span></span>
+<span class="line"><span style="color: #000000">        }</span></span>
+<span class="line"><span style="color: #000000">    }</span></span>
+<span class="line"><span style="color: #000000">} </span><span style="color: #795E26">handle</span><span style="color: #000000"> (</span><span style="color: #001080">_</span><span style="color: #000000">: </span><span style="color: #267F99">Pause</span><span style="color: #000000">,</span><span style="color: #001080"> r</span><span style="color: #000000">: </span><span style="color: #267F99">Resumption</span><span style="color: #000000">&#x3C;</span><span style="color: #267F99">Val</span><span style="color: #000000">, </span><span style="color: #AF00DB">Unit</span><span style="color: #000000">>) {</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #001080">continuation</span><span style="color: #000000">.</span><span style="color: #001080">value</span><span style="color: #000000"> = </span><span style="color: #001080">r</span></span>
+<span class="line"><span style="color: #000000">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #AF00DB">while</span><span style="color: #000000"> (</span><span style="color: #AF00DB">let</span><span style="color: #001080"> Some</span><span style="color: #000000">(</span><span style="color: #001080">cont</span><span style="color: #000000">) &#x3C;- </span><span style="color: #001080">continuation</span><span style="color: #000000">.</span><span style="color: #001080">value</span><span style="color: #000000">) {</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #008000">// Do other stuff do be able to handle</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #008000">// request</span></span>
+<span class="line"><span style="color: #000000">    </span><span style="color: #001080">resume</span><span style="color: #000000"> </span><span style="color: #001080">cont</span><span style="color: #000000"> </span><span style="color: #001080">with</span><span style="color: #000000">  </span><span style="color: #001080">value</span></span>
+<span class="line"><span style="color: #000000">}</span></span></code></pre>
+<p>A good showcase for this is the <a href="">Coroutine library</a> which, among other things, allows you to write generator functions in the Cangjie programming language and use them as normal iterators.</p>
+<h2 id="effect-handler-projects">Effect Handler Projects</h2>
+<ul>
+<li><a href="https://github.com/CJPLUK/effects-tutorial">tutorial</a></li>
+<li><a href="">Coroutine library</a></li>
+<li><a href="">Upload4cj fork</a></li>
+<li><a href="">Structured Concurrency</a></li>
+</ul>
