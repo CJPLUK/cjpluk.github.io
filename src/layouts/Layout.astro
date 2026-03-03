@@ -1,0 +1,35 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Cangjie UK Team – tutorials, projects, and practical resources for developers exploring the Cangjie programming language." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <link rel="icon" href="/assets/cangjie-icon.png" type="image/png" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#20b2aa" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cangjie-uk-team.example/" />
+    <meta property="og:image" content="/QRCodes/CangjieOfficialWesbite.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <link rel="stylesheet" href="/css/index-style.css?v=20260128c" />
+    <script src="/js/site-nav.js" defer></script>
+  </head>
+  <body>
+    <slot />
+    <script type="module" src="/js/index-script.js?v=20260128"></script>
+    <script type="module" src="/js/tableOfContents.js?v=20251030"></script>
+  </body>
+</html>

@@ -1,14 +1,16 @@
 {
   "name": "cangjie-uk-team-website",
-  "version": "1.0.0",
   "type": "module",
+  "version": "1.0.0",
   "scripts": {
-    "build-blogs": "node scripts/preProcessing.js --target=blogs",
-    "build-news": "node scripts/preProcessing.js --target=news",
-    "build-pages": "node scripts/preProcessing.js --target=pages",
-    "build-content": "node scripts/preProcessing.js --target=all"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
+    "astro": "^4.0.0",
     "remark": "^14.0.2",
     "remark-gfm": "^3.0.1",
     "remark-rehype": "^10.1.0",

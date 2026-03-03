@@ -45,6 +45,15 @@ class BlogWebsite
 
     getRouteParams()
     {
+        if (window.__INITIAL_SLUG__) {
+            this.useSlugMode = true;
+            this.blogSlug = window.__INITIAL_SLUG__;
+            return;
+        }
+        if (typeof window.__INITIAL_BLOG_ID__ === 'number' && !isNaN(window.__INITIAL_BLOG_ID__)) {
+            this.blogId = window.__INITIAL_BLOG_ID__;
+            return;
+        }
         const urlParams = new URLSearchParams(window.location.search) ;
         const slugParam = (urlParams.get("slug") || "").trim() ;
         if (/^[A-Za-z0-9_-]+$/.test(slugParam)) {

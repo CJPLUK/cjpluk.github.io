@@ -1,0 +1,124 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Cangjie UK Team">
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="/" class="brand brand-link">
+        Cangjie UK
+        <span class="brand-mark">
+          <img class="brand-logo" src="/assets/cangjie-logo.png" alt="Cangjie Logo" loading="lazy">
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+      </nav>
+    </div>
+  </header>
+  <div class="container">
+    <header class="hero-section">
+      <h1 class="main-title">Cangjie UK Team</h1>
+      <p class="subtitle" aria-label="Site tagline">
+        Building and empowering the Cangjie ecosystem in the UK
+      </p>
+    </header>
+
+    <main class="content">
+      <section class="feature-rail" aria-label="Key Cangjie features">
+        <a class="feature-chip feature-chip-primary" href="learn/learn.html">
+          <span class="feature-code">CJ</span>
+          <span class="feature-text">
+            <span class="feature-label">Learn Cangjie</span>
+            <span class="feature-subtitle">Start tutorial</span>
+          </span>
+        </a>
+        <a class="feature-chip" href="/pages/effectHandlersIntro">
+          <span class="feature-code">EH</span>
+          <span class="feature-label">Effect Handler</span>
+        </a>
+        <a class="feature-chip" href="/pages/distributed-actors">
+          <span class="feature-code">ACT</span>
+          <span class="feature-label">Actor</span>
+        </a>
+      </section>
+
+      <div class="main-layout">
+        <section class="projects-section" id="projects">
+          <div class="section-header">
+            <h2>Blog Posts</h2>
+          </div>
+          <div class="projects-grid" id="projects-container">
+          </div>
+          <div class="show-more-container" id="show-more-container" style="display: none;">
+            <button class="show-more-btn" id="show-more-btn" onclick="toggleShowMore()">
+              Show More
+            </button>
+          </div>
+        </section>
+
+        <aside class="sidebar-column" aria-label="Sidebar">
+          <section class="sidebar-card news-card">
+            <h3>News</h3>
+            <div id="news-container" class="news-list" aria-label="News">
+            </div>
+          </section>
+
+          <section class="sidebar-card community-card">
+            <h3>Community</h3>
+            <p>Join our official Discord to ask questions, share ideas, and discuss with other Cangjie developers.</p>
+            <a class="community-cta" href="https://discord.gg/smhXaXMA" target="_blank" rel="noopener noreferrer" aria-label="Join Cangjie UK Discord server">
+              <img class="community-cta-icon" src="/assets/discord.png" alt="" loading="lazy">
+            </a>
+          </section>
+
+          <section class="sidebar-card tag-card">
+            <h3>Tag</h3>
+            <div id="tag-chips" class="tag-chips" aria-label="Blog tags">
+            </div>
+          </section>
+
+          <a class="sidebar-card tech-talk-card" href="https://www.youtube.com/watch?v=_pKV0zqoeZQ&feature=youtu.be" target="_blank" rel="noopener noreferrer">
+            <div class="tech-talk-thumb">
+              <img src="https://img.youtube.com/vi/_pKV0zqoeZQ/hqdefault.jpg" alt="YouTube cover for featured tech talk" loading="lazy">
+              <div class="tech-talk-badge">Tech Talk</div>
+            </div>
+            <div class="tech-talk-meta">
+              <h3>Featured tech talk</h3>
+              <p class="tech-talk-title">Expressive structured control with effect handlers by Prof. Dan R. Ghica</p> 
+            </div>
+          </a>
+
+          <section class="sidebar-card partners-card">
+            <h3>Partners</h3>
+            <ul class="partners-list">
+              <li><a href="https://www.eclipse.org/" target="_blank" rel="noopener noreferrer">Eclipse Foundation</a></li>
+              <li><a href="https://www.openharmony.cn/homepage/" target="_blank" rel="noopener noreferrer">OpenHarmony</a></li>
+            </ul>
+          </section>
+
+          <section class="sidebar-card follow-us-card" id="about">
+            <h3>Follow us</h3>
+            <nav class="social-links" aria-label="Official links">
+              <a class="social-link" href="https://www.youtube.com/@Cangjie_Lang" target="_blank" rel="noopener noreferrer">
+                <img class="social-icon-img" src="/assets/youtube.png" alt="">
+                <span class="social-label">YouTube</span>
+              </a>
+              <a class="social-link" href="https://x.com/Cangjie_Lang" target="_blank" rel="noopener noreferrer">
+                <img class="social-icon-img" src="/assets/twitter.png" alt="">
+                <span class="social-label">X (Twitter)</span>
+              </a>
+              <a class="social-link" href="https://www.linkedin.com/company/cangjie/" target="_blank" rel="noopener noreferrer">
+                <img class="social-icon-img" src="/assets/linkedin.png" alt="">
+                <span class="social-label">LinkedIn</span>
+              </a>
+              <a class="social-link" href="https://gitcode.com/Cangjie/cangjie_docs" target="_blank" rel="noopener noreferrer">
+                <img class="social-icon-img" src="/assets/gitcode.png" alt="">
+                <span class="social-label">GitCode</span>
+              </a>
+            </nav>
+          </section>
+        </aside>
+      </div>
+    </main>
+  </div>
+</Layout>

@@ -10,8 +10,12 @@ function baseUrl(path) {
 }
 
 (async function () {
-  const params = new URLSearchParams(window.location.search);
-  const id = parseInt(params.get("id"), 10) || 0;
+  const id = typeof window.__INITIAL_NEWS_ID__ === 'number' && !isNaN(window.__INITIAL_NEWS_ID__)
+    ? window.__INITIAL_NEWS_ID__
+    : (() => {
+        const params = new URLSearchParams(window.location.search);
+        return parseInt(params.get("id"), 10) || 0;
+      })();
 
   const listRes = await fetch(baseUrl("../data/newsInformation.json"));
   if (!listRes.ok) {

@@ -1,6 +1,7 @@
 # Dependencies (root and any subfolder, e.g. scripts/node_modules)
 node_modules/
 **/node_modules/
+dist
 
 # OS
 .DS_Store

@@ -36,7 +36,7 @@ async function loadNews()
         const list = await response.json()
         container.innerHTML = list.map((item, index) => {
             const dateStr = formatDateForDisplay(item.date)
-            return `<a href="pages/newsTemplate.html?id=${index}" class="news-item"><span class="news-item-title">${item.title}</span><span class="news-item-date">${dateStr}</span></a>`
+            return `<a href="/news/${index}" class="news-item"><span class="news-item-title">${item.title}</span><span class="news-item-date">${dateStr}</span></a>`
         }).join("")
     }
     catch (e)
@@ -58,7 +58,7 @@ function displaySingleProject(project, projectsContainer)
     const blogId = allProjectsRaw.indexOf(project)
     const projectCard = document.createElement("a")
     projectCard.className = "project-card"
-    projectCard.href = `pages/blogTemplate.html?id=${blogId}`
+    projectCard.href = `/blog/${blogId}`
 
     const tags = Array.isArray(project.tags) ? project.tags : []
     const description = project.description || ""
