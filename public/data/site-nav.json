@@ -3,6 +3,6 @@
     { "label": "Download", "href": "https://cangjie-lang.cn/en/download" },
     { "label": "Docs", "href": "https://cangjie-lang.cn/en/docs" },
     { "label": "Code Repo", "href": "https://gitcode.com/Cangjie" },
-    { "label": "About Team", "href": "pages/about.html" }
+    { "label": "About Team", "href": "/about" }
   ]
 }
