@@ -1,0 +1,31 @@
+<script is:inline>
+    (() => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            return;
+        }
+
+        const heroes = Array.from(document.querySelectorAll(".hero-section"));
+        if (heroes.length === 0) return;
+
+        let ticking = false;
+
+        const update = () => {
+            for (const hero of heroes) {
+                const rect = hero.getBoundingClientRect();
+                const shift = Math.max(-36, Math.min(36, rect.top * -0.22));
+                hero.style.setProperty("--hero-parallax-y", `${shift}px`);
+            }
+            ticking = false;
+        };
+
+        const requestUpdate = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(update);
+        };
+
+        window.addEventListener("scroll", requestUpdate, { passive: true });
+        window.addEventListener("resize", requestUpdate, { passive: true });
+        requestUpdate();
+    })();
+</script>

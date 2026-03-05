@@ -47,31 +47,26 @@ const homeBlogFilterKey = "home-blog-filter";
         </header>
 
         <main class="content">
-            <section class="feature-rail" aria-label="Key Cangjie features">
-                <a
-                    class="feature-chip feature-chip-primary"
-                    href="learn/learn.html"
-                >
-                    <span class="feature-code">CJ</span>
-                    <span class="feature-text">
-                        <span class="feature-label">Learn Cangjie</span>
-                        <span class="feature-subtitle">Start tutorial</span>
-                    </span>
-                </a>
-                <a class="feature-chip" href="/effectHandlersIntro">
-                    <span class="feature-code">EH</span>
-                    <span class="feature-label">Effect Handler</span>
-                </a>
-                <a class="feature-chip" href="/distributed-actors">
-                    <span class="feature-code">ACT</span>
-                    <span class="feature-label">Actor</span>
-                </a>
-            </section>
-
             <div class="main-layout">
                 <section class="projects-section" id="projects">
                     <div class="section-header">
                         <h2>Blog Posts</h2>
+                    </div>
+                    <div class="tag-chips" aria-label="Blog tags">
+                        {
+                            allTags.map((tag) => (
+                                <button
+                                    type="button"
+                                    class="tag"
+                                    data-blog-tag-chip
+                                    data-filter-key={homeBlogFilterKey}
+                                    data-tag={tag}
+                                    aria-pressed="false"
+                                >
+                                    {tag}
+                                </button>
+                            ))
+                        }
                     </div>
                     <BlogPostList
                         tags={[]}
@@ -105,24 +100,38 @@ const homeBlogFilterKey = "home-blog-filter";
                         </div>
                     </section>
 
-                    <section class="sidebar-card tag-card">
-                        <h3>Tag</h3>
-                        <div class="tag-chips" aria-label="Blog tags">
-                            {
-                                allTags.map((tag) => (
-                                    <button
-                                        type="button"
-                                        class="tag"
-                                        data-blog-tag-chip
-                                        data-filter-key={homeBlogFilterKey}
-                                        data-tag={tag}
-                                        aria-pressed="false"
-                                    >
-                                        {tag}
-                                    </button>
-                                ))
-                            }
-                        </div>
+                    <section class="sidebar-card resources-card">
+                        <h3>Main Project Resources</h3>
+                        Useful links for the main Cangjie project:
+                        <ul class="partners-list">
+                            <li>
+                                <a
+                                    href="https://cangjie-lang.cn/en/download"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    SDK download
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="https://cangjie-lang.cn/en/docs"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Docs
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="https://gitcode.com/Cangjie"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Source
+                                </a>
+                            </li>
+                        </ul>
                     </section>
 
                     <a

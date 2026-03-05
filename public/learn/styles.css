@@ -15,7 +15,9 @@ body {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+        Cantarell, sans-serif;
     background: #f5fafc;
     min-height: 100vh;
     color: #2c3e50;
@@ -68,7 +70,7 @@ body {
 }
 
 .loading::after {
-    content: '';
+    content: "";
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -80,7 +82,9 @@ body {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .error {
@@ -149,7 +153,7 @@ body {
 }
 
 .lesson-card::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -254,7 +258,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
 }
 
 .start-button {
@@ -289,7 +293,7 @@ body {
 
 .back-button {
     background: #e2e8f0;
-    color: #4a5568; 
+    color: #4a5568;
     padding: 15px 30px;
     border: none;
     border-radius: 50px;
@@ -300,7 +304,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     transform: translateY(-5px);
 }
 
@@ -333,7 +337,7 @@ body {
     background: white;
     border-radius: 20px;
     padding: 40px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
     min-height: 600px;
 }
 
@@ -366,7 +370,7 @@ body {
 }
 
 .description-content {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.95rem;
     line-height: 1.6;
     color: #4a5568;
@@ -400,9 +404,15 @@ body {
     border-radius: 50%;
 }
 
-.code-dot.red { background: #ff5f56; }
-.code-dot.yellow { background: #ffbd2e; }
-.code-dot.green { background: #27ca3f; }
+.code-dot.red {
+    background: #ff5f56;
+}
+.code-dot.yellow {
+    background: #ffbd2e;
+}
+.code-dot.green {
+    background: #27ca3f;
+}
 
 .code-title {
     color: #a0aec0;
@@ -428,7 +438,7 @@ body {
 pre {
     margin: 0 !important;
     background: transparent !important;
-    font-family: 'JetBrains Mono', monospace !important;
+    font-family: "JetBrains Mono", monospace !important;
     font-size: 0.95rem !important;
     line-height: 1.6 !important;
     white-space: pre-wrap !important;
@@ -436,7 +446,7 @@ pre {
 }
 
 code {
-    font-family: 'JetBrains Mono', monospace !important;
+    font-family: "JetBrains Mono", monospace !important;
 }
 
 .navigation {
@@ -458,7 +468,7 @@ code {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
 }
 
 .nav-button:disabled {
@@ -523,31 +533,31 @@ code {
     .lessons-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .lesson-container {
         flex-direction: column;
         padding: 20px;
     }
-    
+
     .header h1 {
         font-size: 2.5rem;
     }
-    
+
     .navigation {
         flex-direction: column;
         gap: 15px;
     }
-    
+
     .nav-button {
         width: 100%;
         justify-content: center;
     }
-    
+
     .home-actions {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .action-button {
         width: 100%;
         max-width: 300px;
@@ -573,72 +583,181 @@ code {
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(180deg); }
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-20px) rotate(180deg);
+    }
 }
 /* Shared site header – same as index-style.css so Learn/other pages match exactly */
 .site-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-  min-height: 50px;
-  display: flex;
-  align-items: stretch;
-  backdrop-filter: saturate(180%) blur(8px);
-  background: rgba(248, 255, 254, 0.7);
-  border-bottom: 1px solid #e6f2f1;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  font-size: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    min-height: 50px;
+    display: flex;
+    align-items: stretch;
+    backdrop-filter: saturate(180%) blur(8px);
+    background: rgba(248, 255, 254, 0.7);
+    border-bottom: 1px solid #e6f2f1;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+        Cantarell, sans-serif;
+    font-size: 1rem;
 }
 .site-header-inner {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0.75rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
 }
 .site-header .brand {
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  color: #0f4c4a;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: #0f4c4a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 .site-header a.brand-link {
-  text-decoration: none;
-  color: inherit;
+    text-decoration: none;
+    color: inherit;
 }
 .site-header a.brand-link:hover {
-  color: #20b2aa;
+    color: #20b2aa;
 }
 .site-header .brand-mark {
-  display: inline-block;
-  line-height: 0;
+    display: inline-block;
+    line-height: 0;
 }
 .site-header .brand-logo {
-  height: 22px;
-  width: auto;
-  display: inline-block;
+    height: 22px;
+    width: auto;
+    display: inline-block;
 }
 .site-header .site-nav {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
+    display: flex;
+    gap: 0;
+    align-items: center;
+}
+.site-header .site-nav-menu {
+    margin: 0;
+}
+.site-header .site-nav-desktop {
+    display: flex;
+}
+.site-header .site-nav-mobile {
+    display: none;
+}
+.site-header .site-nav-toggle {
+    display: none;
+}
+.site-header .site-nav-toggle::-webkit-details-marker {
+    display: none;
 }
 .site-header .nav-link {
-  color: #2c3e50;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
+    color: #2c3e50;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    position: relative;
+    padding: 0 0.65rem;
+}
+.site-header .nav-link + .nav-link::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 0.9em;
+    background: #d6e7e6;
 }
 .site-header .nav-link:hover,
 .site-header .nav-link:focus-visible {
-  color: #20b2aa;
+    color: #20b2aa;
+}
+.site-header .nav-link.active {
+    color: #0f766e;
+    font-weight: 700;
+}
+
+@media (max-width: 960px) {
+    .site-header .site-nav-desktop {
+        display: none;
+    }
+
+    .site-header .site-nav-mobile {
+        display: block;
+    }
+
+    .site-header .site-header-inner {
+        gap: 0.75rem;
+    }
+
+    .site-header .site-nav-menu {
+        margin-left: auto;
+        position: relative;
+    }
+
+    .site-header .site-nav-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.35rem 0.8rem;
+        border: 1px solid #cfe7e4;
+        border-radius: 999px;
+        background: #ffffff;
+        color: #0f4c4a;
+        font-weight: 600;
+        font-size: 0.92rem;
+        cursor: pointer;
+        list-style: none;
+    }
+
+    .site-header .site-nav-menu > .site-nav {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 0.5rem);
+        min-width: 230px;
+        padding: 0.35rem;
+        background: #ffffff;
+        border: 1px solid #dbe9e7;
+        border-radius: 10px;
+        box-shadow: 0 8px 18px rgba(15, 76, 74, 0.12);
+        flex-direction: column;
+        align-items: stretch;
+        z-index: 60;
+    }
+
+    .site-header .site-nav-menu[open] > .site-nav {
+        display: flex;
+    }
+
+    .site-header .site-nav .nav-link {
+        padding: 0.5rem 0.7rem;
+        border-radius: 6px;
+    }
+
+    .site-header .site-nav .nav-link + .nav-link::before {
+        display: none;
+    }
+
+    .site-header .site-nav .nav-link:hover {
+        background: #f2fbfa;
+    }
+
+    .site-header .site-nav .nav-link.active {
+        background: #eefcfa;
+    }
 }

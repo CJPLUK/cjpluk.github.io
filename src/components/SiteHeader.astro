@@ -2,11 +2,34 @@
 import cangjieLogo from "../assets/cangjie-logo.png";
 
 const navItems = [
-    { label: "Download", href: "https://cangjie-lang.cn/en/download" },
-    { label: "Docs", href: "https://cangjie-lang.cn/en/docs" },
-    { label: "Code Repo", href: "https://gitcode.com/Cangjie" },
-    { label: "About Team", href: "/about" },
+    { label: "Home", href: "/" },
+    { label: "Blog", href: "/blog" },
+    { label: "Learn", href: "/learn/learn.html" },
+    { label: "Effect Handlers", href: "/effectHandlersIntro" },
+    { label: "Distributed Actors", href: "/distributed-actors" },
+    { label: "About", href: "/about" },
 ];
+
+const normalizePath = (path: string) => {
+    const trimmed = path.replace(/\/+$/, "");
+    return trimmed === "" ? "/" : trimmed;
+};
+
+const currentPath = normalizePath(Astro.url.pathname);
+
+const isActive = (href: string) => {
+    const target = normalizePath(href);
+
+    if (target === "/") return currentPath === "/";
+    if (target === "/blog")
+        return currentPath === "/blog" || currentPath.startsWith("/blog/");
+    if (target === "/learn/learn.html")
+        return (
+            currentPath === "/learn/learn.html" ||
+            currentPath.startsWith("/learn/")
+        );
+    return currentPath === target || currentPath.startsWith(`${target}/`);
+};
 ---
 
 <header class="site-header">
@@ -22,14 +45,34 @@ const navItems = [
                 />
             </span>
         </a>
-        <nav class="site-nav" aria-label="Primary">
+        <nav class="site-nav site-nav-desktop" aria-label="Primary">
             {
                 navItems.map((item) => (
-                    <a href={item.href} class="nav-link">
+                    <a
+                        href={item.href}
+                        class={`nav-link ${isActive(item.href) ? "active" : ""}`}
+                    >
                         {item.label}
                     </a>
                 ))
             }
         </nav>
+        <details class="site-nav-menu site-nav-mobile">
+            <summary class="site-nav-toggle" aria-label="Toggle navigation">
+                Menu
+            </summary>
+            <nav class="site-nav" aria-label="Primary">
+                {
+                    navItems.map((item) => (
+                        <a
+                            href={item.href}
+                            class={`nav-link ${isActive(item.href) ? "active" : ""}`}
+                        >
+                            {item.label}
+                        </a>
+                    ))
+                }
+            </nav>
+        </details>
     </div>
 </header>

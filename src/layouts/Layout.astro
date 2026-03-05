@@ -2,6 +2,7 @@
 import "../styles/index.css";
 import cangjieIcon from "../assets/cangjie-icon.png";
 import SiteHeader from "../components/SiteHeader.astro";
+import HeroParallax from "../components/HeroParallax.astro";
 
 interface Props {
     title: string;
@@ -38,5 +39,6 @@ const {
     <body>
         <SiteHeader />
         <slot />
+        <HeroParallax />
     </body>
 </html>
