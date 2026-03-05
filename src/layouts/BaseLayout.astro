@@ -1,0 +1,84 @@
+---
+interface Props {
+    title: string;
+    description?: string;
+    isBlogPage?: boolean;
+}
+
+const {
+    title,
+    description = "Cangjie UK Team – tutorials, projects, and practical resources for developers exploring the Cangjie programming language.",
+    isBlogPage = false,
+} = Astro.props;
+
+const navItems = [
+    { label: "Download", href: "https://cangjie-lang.cn/en/download" },
+    { label: "Docs", href: "https://cangjie-lang.cn/en/docs" },
+    { label: "Code Repo", href: "https://gitcode.com/Cangjie" },
+    { label: "About Team", href: "/about" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title}</title>
+        <link rel="icon" href="/assets/cangjie-icon.png" type="image/png" />
+        <meta name="description" content={description} />
+        <meta name="theme-color" content="#20b2aa" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://cangjie-uk-team.example/" />
+        <meta
+            property="og:image"
+            content="/QRCodes/CangjieOfficialWesbite.png"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <link rel="stylesheet" href="/css/index-style.css?v=20260128c" />
+        <link rel="stylesheet" href="/css/site-header.css" />
+        {
+            isBlogPage && (
+                <link rel="stylesheet" href="/css/blog-style.css?v=20260128" />
+            )
+        }
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+        />
+    </head>
+    <body>
+        <header class="site-header">
+            <div class="site-header-inner">
+                <a href="/" class="brand brand-link">
+                    Cangjie UK
+                    <span class="brand-mark">
+                        <img
+                            class="brand-logo"
+                            src="/assets/cangjie-logo.png"
+                            alt="Cangjie Logo"
+                            loading="lazy"
+                        />
+                    </span>
+                </a>
+                <nav class="site-nav" aria-label="Primary">
+                    {
+                        navItems.map((item) => (
+                            <a href={item.href} class="nav-link">
+                                {item.label}
+                            </a>
+                        ))
+                    }
+                </nav>
+            </div>
+        </header>
+
+        <slot />
+
+        <script type="module" src="/js/tableOfContents.js?v=20251030"></script>
+    </body>
+</html>

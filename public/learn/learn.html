@@ -1,143 +1,214 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>(function(){var d=document.documentElement;d.style.setProperty('overflow-y','scroll','important');d.style.setProperty('overflow-x','hidden','important');d.style.setProperty('scrollbar-gutter','stable','important');})();</script>
-    <title>Learn Cangjie - Interactive Programming Tutorial</title>
-    <link rel="icon" href="../assets/cangjie-icon.png" type="image/png">
-    <style>
-        html { overflow-y: scroll !important; overflow-x: hidden !important; scrollbar-gutter: stable !important; }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=optional" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-    <link rel="stylesheet" href="../css/site-header.css">
-    <link rel="stylesheet" href="styles.css">
-    <script src="../js/site-nav.js" defer></script>
-    <style>
-        /* No top gap so header aligns vertically with main site */
-        html, body { margin-top: 0 !important; padding-top: 0 !important; }
-    </style>
-    <script>
-        (function() {
-            var d = document.documentElement;
-            function lockScrollbar() {
-                d.style.setProperty('overflow-y', 'scroll', 'important');
-                d.style.setProperty('overflow-x', 'hidden', 'important');
-                d.style.setProperty('scrollbar-gutter', 'stable', 'important');
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script>
+            (function () {
+                var d = document.documentElement;
+                d.style.setProperty("overflow-y", "scroll", "important");
+                d.style.setProperty("overflow-x", "hidden", "important");
+                d.style.setProperty("scrollbar-gutter", "stable", "important");
+            })();
+        </script>
+        <title>Learn Cangjie - Interactive Programming Tutorial</title>
+        <link rel="icon" href="../assets/cangjie-icon.png" type="image/png" />
+        <style>
+            html {
+                overflow-y: scroll !important;
+                overflow-x: hidden !important;
+                scrollbar-gutter: stable !important;
             }
-            lockScrollbar();
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', lockScrollbar);
-                window.addEventListener('load', lockScrollbar);
+        </style>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=optional"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+        />
+        <link rel="stylesheet" href="../css/site-header.css" />
+        <link rel="stylesheet" href="styles.css" />
+        <style>
+            /* No top gap so header aligns vertically with main site */
+            html,
+            body {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
             }
-        })();
-    </script>
-</head>
-<body>
-    <header class="site-header">
-        <div class="site-header-inner">
-            <a href="../index.html" class="brand brand-link">
-                Cangjie UK
-                <span class="brand-mark">
-                    <img class="brand-logo" src="../assets/cangjie-logo.png" alt="Cangjie Logo" loading="lazy">
-                </span>
-            </a>
-            <nav class="site-nav" aria-label="Primary">
-                <!-- filled by js/site-nav.js from data/site-nav.json -->
-            </nav>
-        </div>
-    </header>
+        </style>
+        <script>
+            (function () {
+                var d = document.documentElement;
+                function lockScrollbar() {
+                    d.style.setProperty("overflow-y", "scroll", "important");
+                    d.style.setProperty("overflow-x", "hidden", "important");
+                    d.style.setProperty(
+                        "scrollbar-gutter",
+                        "stable",
+                        "important",
+                    );
+                }
+                lockScrollbar();
+                if (document.readyState === "loading") {
+                    document.addEventListener(
+                        "DOMContentLoaded",
+                        lockScrollbar,
+                    );
+                    window.addEventListener("load", lockScrollbar);
+                }
+            })();
+        </script>
+    </head>
+    <body>
+        <header class="site-header">
+            <div class="site-header-inner">
+                <a href="../index.html" class="brand brand-link">
+                    Cangjie UK
+                    <span class="brand-mark">
+                        <img
+                            class="brand-logo"
+                            src="../assets/cangjie-logo.png"
+                            alt="Cangjie Logo"
+                            loading="lazy"
+                        />
+                    </span>
+                </a>
+                <nav class="site-nav" aria-label="Primary">
+                    <a
+                        href="https://cangjie-lang.cn/en/download"
+                        class="nav-link"
+                        >Download</a
+                    >
+                    <a href="https://cangjie-lang.cn/en/docs" class="nav-link"
+                        >Docs</a
+                    >
+                    <a href="https://gitcode.com/Cangjie" class="nav-link"
+                        >Code Repo</a
+                    >
+                    <a href="/about" class="nav-link">About Team</a>
+                </nav>
+            </div>
+        </header>
 
-    <div class="floating-particles" id="particles"></div>
-    
-    <div class="container">
-        <div class="header">
-            <h1>Learn Cangjie</h1>
-            <p>Master the modern programming language step by step</p>
-        </div>
+        <div class="floating-particles" id="particles"></div>
 
-        <!-- Loading State -->
-        <div id="loadingIndicator" class="loading">
-            Loading lessons...
-        </div>
+        <div class="container">
+            <div class="header">
+                <h1>Learn Cangjie</h1>
+                <p>Master the modern programming language step by step</p>
+            </div>
 
-        <!-- Error State -->
-        <div id="errorMessage" class="error" style="display: none;">
-            <h3>Error Loading Content</h3>
-            <p>Please make sure all lesson files are in the same folder as this HTML file.</p>
-        </div>
+            <!-- Loading State -->
+            <div id="loadingIndicator" class="loading">Loading lessons...</div>
 
-        <!-- Home Page - Lesson List -->
-        <div id="homePage" style="display: none;">
-            <div class="home-content">
-                <div class="home-intro">
-                    <h2>Choose a Lesson to Begin</h2>
-                    <p>Select any lesson below to start learning Cangjie programming. Each lesson builds upon the previous ones, but you can jump to any topic that interests you.</p>
+            <!-- Error State -->
+            <div id="errorMessage" class="error" style="display: none">
+                <h3>Error Loading Content</h3>
+                <p>
+                    Please make sure all lesson files are in the same folder as
+                    this HTML file.
+                </p>
+            </div>
+
+            <!-- Home Page - Lesson List -->
+            <div id="homePage" style="display: none">
+                <div class="home-content">
+                    <div class="home-intro">
+                        <h2>Choose a Lesson to Begin</h2>
+                        <p>
+                            Select any lesson below to start learning Cangjie
+                            programming. Each lesson builds upon the previous
+                            ones, but you can jump to any topic that interests
+                            you.
+                        </p>
+                    </div>
+
+                    <div class="lessons-grid" id="lessonsGrid">
+                        <!-- Lesson cards will be populated by JavaScript -->
+                    </div>
+
+                    <div class="home-actions">
+                        <button
+                            class="action-button start-button"
+                            id="startFromBeginning"
+                        >
+                            🚀 Start from Beginning
+                        </button>
+                        <button
+                            class="action-button random-button"
+                            id="randomLesson"
+                        >
+                            🎲 Random Lesson
+                        </button>
+                    </div>
                 </div>
-                
-                <div class="lessons-grid" id="lessonsGrid">
-                    <!-- Lesson cards will be populated by JavaScript -->
-                </div>
-                
-                <div class="home-actions">
-                    <button class="action-button start-button" id="startFromBeginning">
-                        🚀 Start from Beginning
+            </div>
+
+            <!-- Lesson View -->
+            <div id="lessonView" style="display: none">
+                <div class="lesson-header">
+                    <button class="back-button" id="backToHome">
+                        ← Back to Lessons
                     </button>
-                    <button class="action-button random-button" id="randomLesson">
-                        🎲 Random Lesson
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="lesson-container">
+                    <div class="description-panel">
+                        <div class="topic-title">
+                            <div class="topic-number" id="topicNumber">1</div>
+                            <span id="topicTitle">Loading...</span>
+                        </div>
+                        <div
+                            class="description-content"
+                            id="descriptionContent"
+                        >
+                            Loading lesson content...
+                        </div>
+                    </div>
+
+                    <div class="code-panel">
+                        <div class="code-header">
+                            <div class="code-dot red"></div>
+                            <div class="code-dot yellow"></div>
+                            <div class="code-dot green"></div>
+                            <div class="code-title" id="codeFileName">
+                                main.cj
+                            </div>
+                            <button class="copy-button" id="copyCodeButton">
+                                Copy
+                            </button>
+                        </div>
+                        <pre><code class="cangjie" id="codeBlock">// Loading code...</code></pre>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button
+                        class="nav-button prev-button"
+                        id="prevButton"
+                        disabled
+                    >
+                        ← Previous
+                    </button>
+                    <div class="topic-counter">
+                        <span id="currentTopic">1</span> of
+                        <span id="totalTopics">0</span>
+                    </div>
+                    <button
+                        class="nav-button next-button"
+                        id="nextButton"
+                        disabled
+                    >
+                        Next →
                     </button>
                 </div>
             </div>
         </div>
-
-        <!-- Lesson View -->
-        <div id="lessonView" style="display: none;">
-            <div class="lesson-header">
-                <button class="back-button" id="backToHome">
-                    ← Back to Lessons
-                </button>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-            </div>
-
-            <div class="lesson-container">
-                <div class="description-panel">
-                    <div class="topic-title">
-                        <div class="topic-number" id="topicNumber">1</div>
-                        <span id="topicTitle">Loading...</span>
-                    </div>
-                    <div class="description-content" id="descriptionContent">
-                        Loading lesson content...
-                    </div>
-                </div>
-
-                <div class="code-panel">
-                    <div class="code-header">
-                        <div class="code-dot red"></div>
-                        <div class="code-dot yellow"></div>
-                        <div class="code-dot green"></div>
-                        <div class="code-title" id="codeFileName">main.cj</div>
-                        <button class="copy-button" id="copyCodeButton">Copy</button>
-                    </div>
-                    <pre><code class="cangjie" id="codeBlock">// Loading code...</code></pre>
-                </div>
-            </div>
-
-            <div class="navigation">
-                <button class="nav-button prev-button" id="prevButton" disabled>
-                    ← Previous
-                </button>
-                <div class="topic-counter">
-                    <span id="currentTopic">1</span> of <span id="totalTopics">0</span>
-                </div>
-                <button class="nav-button next-button" id="nextButton" disabled>
-                    Next →
-                </button>
-            </div>
-        </div>
-    </div>
-    <script type="module" src="script.js"></script>
-</body>
+        <script type="module" src="script.js"></script>
+    </body>
 </html>

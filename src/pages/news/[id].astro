@@ -1,61 +1,72 @@
 ---
-export function getStaticPaths() {
-  return [
-    { params: { id: '0' } },
-    { params: { id: '1' } },
-    { params: { id: '2' } },
-  ];
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+    const newsEntries: CollectionEntry<"news">[] = await getCollection("news");
+
+    const sortedEntries = newsEntries.sort(
+        (a: CollectionEntry<"news">, b: CollectionEntry<"news">) => {
+            const [dayA, monthA, yearA] = a.data.date.split("/");
+            const [dayB, monthB, yearB] = b.data.date.split("/");
+            const dateA = new Date(
+                parseInt(yearA),
+                parseInt(monthA) - 1,
+                parseInt(dayA),
+            );
+            const dateB = new Date(
+                parseInt(yearB),
+                parseInt(monthB) - 1,
+                parseInt(dayB),
+            );
+            return dateB.getTime() - dateA.getTime();
+        },
+    );
+
+    return sortedEntries.map(
+        (entry: CollectionEntry<"news">, index: number) => ({
+            params: { id: String(index) },
+            props: { entry },
+        }),
+    );
 }
 
-const { id } = Astro.params;
+interface Props {
+    entry: CollectionEntry<"news">;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const formatDate = (dateStr: string) => {
+    const [day, month, year] = dateStr.split("/");
+    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    return date.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
+};
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cangjie UK Team — News</title>
-  <link rel="icon" href="/assets/cangjie-icon.png" type="image/png">
-  <meta name="theme-color" content="#20b2aa">
-  <link rel="stylesheet" href="/css/index-style.css?v=20251030">
-  <link rel="stylesheet" href="/css/blog-style.css?v=20260128">
-  <script src="/js/site-nav.js" defer></script>
-</head>
-<body>
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a href="/" class="brand brand-link">
-        Cangjie UK
-        <span class="brand-mark">
-          <img class="brand-logo" src="/assets/cangjie-logo.png" alt="Cangjie Logo" loading="lazy">
-        </span>
-      </a>
-      <nav class="site-nav" aria-label="Primary">
-      </nav>
-    </div>
-  </header>
-
-  <main class="blog-main news-page-main">
-    <div class="blog-main-inner news-page-inner">
-      <a href="/" class="news-back-link">← Back to Home</a>
-      <article class="news-article">
-        <header class="news-article-header">
-          <h1 class="news-article-title" id="news-title">News</h1>
-          <time class="news-article-date" id="news-date" datetime="">—</time>
-        </header>
-        <div class="news-article-body md-window">
-          <div id="news-content" data-news-id={id}>
-            <div class="loading">Loading...</div>
-          </div>
+<BaseLayout title="News — Cangjie UK Team" isBlogPage={true}>
+    <main class="blog-main news-page-main">
+        <div class="blog-main-inner news-page-inner">
+            <a href="/" class="news-back-link">← Back to Home</a>
+            <article class="news-article">
+                <header class="news-article-header">
+                    <h1 class="news-article-title">{entry.data.title}</h1>
+                    <time class="news-article-date" datetime={entry.data.date}
+                        >{formatDate(entry.data.date)}</time
+                    >
+                </header>
+                <div class="news-article-body md-window">
+                    <div id="news-content" class="news-content">
+                        <Content />
+                    </div>
+                </div>
+            </article>
         </div>
-      </article>
-    </div>
-  </main>
-
-  <script define:vars={{ id }}>
-    window.__INITIAL_NEWS_ID__ = parseInt(id, 10);
-  </script>
-  <script type="module" src="/js/news-script.js?v=20251030"></script>
-</body>
-</html>
+    </main>
+</BaseLayout>

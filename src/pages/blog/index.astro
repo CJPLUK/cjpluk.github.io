@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const blogEntries: CollectionEntry<'blog'>[] = await getCollection('blog');
+
+const sortedEntries = blogEntries.sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => {
+  const [dayA, monthA, yearA] = a.data.date.split('/');
+  const [dayB, monthB, yearB] = b.data.date.split('/');
+  const dateA = new Date(parseInt(yearA), parseInt(monthA) - 1, parseInt(dayA));
+  const dateB = new Date(parseInt(yearB), parseInt(monthB) - 1, parseInt(dayB));
+  return dateB.getTime() - dateA.getTime();
+});
+
+const formatDate = (dateStr: string) => {
+  const [day, month, year] = dateStr.split('/');
+  const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+  return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+};
+---
+
+<BaseLayout title="Blog — Cangjie UK Team" description="Explore blog write-ups and repositories from the Cangjie UK Team.">
+  <div class="container">
+    <header class="hero-section">
+      <h1 class="main-title">Blog Posts</h1>
+    </header>
+
+    <main class="content">
+      <div class="projects-grid">
+        {sortedEntries.map((entry) => (
+          <a class="project-card" href={`/blog/${entry.slug}/`}>
+            <div class="project-content">
+              <h2 class="project-title">{entry.data.title}</h2>
+              <p class="project-description">{entry.data.description}</p>
+              <div class="project-meta">
+                <span class="project-date">{formatDate(entry.data.date)}</span>
+                {entry.data.tags && entry.data.tags.length > 0 && (
+                  <div class="project-tags">
+                    {entry.data.tags.slice(0, 3).map((tag: string) => (
+                      <span class="tag">{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </main>
+  </div>
+</BaseLayout>

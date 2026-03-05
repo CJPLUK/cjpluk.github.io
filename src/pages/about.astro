@@ -1,59 +1,132 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+
+const navItems = [
+    { label: "Download", href: "https://cangjie-lang.cn/en/download" },
+    { label: "Docs", href: "https://cangjie-lang.cn/en/docs" },
+    { label: "Code Repo", href: "https://gitcode.com/Cangjie" },
+    { label: "About Team", href: "/about" },
+];
 ---
 
-<Layout title="About — Cangjie UK Team" description="About the Cangjie UK Team – who we are and what we do.">
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a href="/" class="brand brand-link">
-        Cangjie UK
-        <span class="brand-mark">
-          <img class="brand-logo" src="/assets/cangjie-logo.png" alt="Cangjie Logo" loading="lazy">
-        </span>
-      </a>
-      <nav class="site-nav" aria-label="Primary">
-      </nav>
-    </div>
-  </header>
+<Layout
+    title="About — Cangjie UK Team"
+    description="About the Cangjie UK Team – who we are and what we do."
+>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a href="/" class="brand brand-link">
+                Cangjie UK
+                <span class="brand-mark">
+                    <img
+                        class="brand-logo"
+                        src="/assets/cangjie-logo.png"
+                        alt="Cangjie Logo"
+                        loading="lazy"
+                    />
+                </span>
+            </a>
+            <nav class="site-nav" aria-label="Primary">
+                {
+                    navItems.map((item) => (
+                        <a href={item.href} class="nav-link">
+                            {item.label}
+                        </a>
+                    ))
+                }
+            </nav>
+        </div>
+    </header>
 
-  <main class="container about-page">
-    <div class="about-inner">
-      <h1>About Cangjie UK Team</h1>
-      <p class="lead">
-        We are a team based in the Edinburgh focused on the <a href="https://cangjie-lang.cn/en" target="_blank" rel="noopener noreferrer">Cangjie</a> programming language — sharing tutorials, writing blogs, and building practical resources for developers.
-      </p>
+    <main class="container about-page">
+        <div class="about-inner">
+            <h1>About Cangjie UK Team</h1>
+            <p class="lead">
+                We are a team based in the Edinburgh focused on the <a
+                    href="https://cangjie-lang.cn/en"
+                    target="_blank"
+                    rel="noopener noreferrer">Cangjie</a
+                > programming language — sharing tutorials, writing blogs, and building
+                practical resources for developers.
+            </p>
 
-      <section class="card">
-        <h2>Who we are</h2>
-        <p>
-          Cangjie UK Team brings together developers and researchers interested in high-performance, type-safe systems programming with Cangjie. We create learning materials, open-source projects, and community content to help others get started and go deeper.
-        </p>
-      </section>
+            <section class="card">
+                <h2>Who we are</h2>
+                <p>
+                    Cangjie UK Team brings together developers and researchers
+                    interested in high-performance, type-safe systems
+                    programming with Cangjie. We create learning materials,
+                    open-source projects, and community content to help others
+                    get started and go deeper.
+                </p>
+            </section>
 
-      <section class="card">
-        <h2>What we do</h2>
-        <p>
-          We maintain this site with <strong>Blogs</strong> (project write-ups and technical posts), <strong>News</strong> (releases and updates), and links to the official Cangjie tutorial and channels. You can follow our work here and through the official Cangjie community.
-        </p>
-      </section>
+            <section class="card">
+                <h2>What we do</h2>
+                <p>
+                    We maintain this site with <strong>Blogs</strong> (project write-ups
+                    and technical posts), <strong>News</strong> (releases and updates),
+                    and links to the official Cangjie tutorial and channels. You can
+                    follow our work here and through the official Cangjie community.
+                </p>
+            </section>
 
-      <section class="card">
-        <h2>Get in touch</h2>
-        <p>
-          For the language itself, visit the <a href="https://cangjie-lang.cn/en" target="_blank" rel="noopener noreferrer">official Cangjie website</a>. For tutorials and docs, check the links on our <a href="/">homepage</a>. More contact and channel links are listed in the sidebar there.
-        </p>
-      </section>
-    </div>
-  </main>
+            <section class="card">
+                <h2>Get in touch</h2>
+                <p>
+                    For the language itself, visit the <a
+                        href="https://cangjie-lang.cn/en"
+                        target="_blank"
+                        rel="noopener noreferrer">official Cangjie website</a
+                    >. For tutorials and docs, check the links on our <a
+                        href="/">homepage</a
+                    >. More contact and channel links are listed in the sidebar
+                    there.
+                </p>
+            </section>
+        </div>
+    </main>
 </Layout>
 
 <style>
-  .about-page { padding: 2rem 0 4rem; }
-  .about-inner { max-width: 680px; margin: 0 auto; padding: 0 2rem; }
-  .about-page h1 { font-size: 2rem; color: #0f4c4a; margin-bottom: 1.5rem; }
-  .about-page .lead { font-size: 1.1rem; line-height: 1.7; color: #2c3e50; margin-bottom: 2rem; }
-  .about-page .card { background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid #e5f0ef; padding: 2rem; margin-bottom: 2rem; }
-  .about-page h2 { font-size: 1.25rem; color: #0f766e; margin-bottom: 0.75rem; }
-  .about-page p { margin-bottom: 1rem; line-height: 1.7; color: #2c3e50; }
-  .about-page p:last-child { margin-bottom: 0; }
+    .about-page {
+        padding: 2rem 0 4rem;
+    }
+    .about-inner {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+    .about-page h1 {
+        font-size: 2rem;
+        color: #0f4c4a;
+        margin-bottom: 1.5rem;
+    }
+    .about-page .lead {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: #2c3e50;
+        margin-bottom: 2rem;
+    }
+    .about-page .card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        border: 1px solid #e5f0ef;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    .about-page h2 {
+        font-size: 1.25rem;
+        color: #0f766e;
+        margin-bottom: 0.75rem;
+    }
+    .about-page p {
+        margin-bottom: 1rem;
+        line-height: 1.7;
+        color: #2c3e50;
+    }
+    .about-page p:last-child {
+        margin-bottom: 0;
+    }
 </style>
