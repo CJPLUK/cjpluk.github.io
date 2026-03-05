@@ -8,6 +8,11 @@ interface Props {
 }
 
 const { tags, interactiveFilterKey } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+const withBase = (path: string) => {
+    if (path === "/") return baseUrl;
+    return `${baseUrl}${path.replace(/^\//, "")}`;
+};
 
 const blogEntries: CollectionEntry<"blog">[] = await getCollection("blog");
 
@@ -60,7 +65,7 @@ const entriesToRender =
             return (
                 <a
                     class="project-card"
-                    href={`/blog/${entry.slug}/`}
+                    href={withBase(`/blog/${entry.slug}/`)}
                     data-entry-tags={entryTags.join("|")}
                 >
                     <h3>{entry.data.title}</h3>

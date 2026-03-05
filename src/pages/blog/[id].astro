@@ -37,6 +37,11 @@ interface Props {
 
 const { entry } = Astro.props;
 const { Content, headings } = await entry.render();
+const baseUrl = import.meta.env.BASE_URL;
+const withBase = (path: string) => {
+    if (path === "/") return baseUrl;
+    return `${baseUrl}${path.replace(/^\//, "")}`;
+};
 
 const formatDate = (dateStr: string) => {
     const [day, month, year] = dateStr.split("/");
@@ -56,7 +61,7 @@ const formatDate = (dateStr: string) => {
 >
     <main class="blog-main">
         <div class="blog-main-inner">
-            <a href="/blog" class="news-back-link blog-back-link"
+            <a href={withBase("/blog")} class="news-back-link blog-back-link"
                 >← Back to Blog</a
             >
             <div class="md-window">

@@ -10,12 +10,23 @@ const navItems = [
     { label: "About", href: "/about" },
 ];
 
+const baseUrl = import.meta.env.BASE_URL;
+const withBase = (path: string) => {
+    if (path === "/") return baseUrl;
+    return `${baseUrl}${path.replace(/^\//, "")}`;
+};
+
 const normalizePath = (path: string) => {
     const trimmed = path.replace(/\/+$/, "");
     return trimmed === "" ? "/" : trimmed;
 };
 
-const currentPath = normalizePath(Astro.url.pathname);
+const currentPathFull = normalizePath(Astro.url.pathname);
+const basePath = normalizePath(baseUrl);
+const currentPath =
+    basePath !== "/" && currentPathFull.startsWith(basePath)
+        ? normalizePath(currentPathFull.slice(basePath.length) || "/")
+        : currentPathFull;
 
 const isActive = (href: string) => {
     const target = normalizePath(href);
@@ -34,7 +45,7 @@ const isActive = (href: string) => {
 
 <header class="site-header">
     <div class="site-header-inner">
-        <a href="/" class="brand brand-link">
+        <a href={withBase("/")} class="brand brand-link">
             Cangjie UK
             <span class="brand-mark">
                 <img
@@ -49,7 +60,7 @@ const isActive = (href: string) => {
             {
                 navItems.map((item) => (
                     <a
-                        href={item.href}
+                        href={withBase(item.href)}
                         class={`nav-link ${isActive(item.href) ? "active" : ""}`}
                     >
                         {item.label}
@@ -65,7 +76,7 @@ const isActive = (href: string) => {
                 {
                     navItems.map((item) => (
                         <a
-                            href={item.href}
+                            href={withBase(item.href)}
                             class={`nav-link ${isActive(item.href) ? "active" : ""}`}
                         >
                             {item.label}

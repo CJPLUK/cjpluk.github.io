@@ -3,7 +3,6 @@ import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import BlogPostList from "../components/BlogPostList.astro";
-import discordIcon from "../assets/discord.png";
 import youtubeIcon from "../assets/youtube.png";
 import twitterIcon from "../assets/twitter.png";
 import linkedInIcon from "../assets/linkedin.png";
@@ -35,6 +34,11 @@ const allTags = Array.from(
     new Set(blogEntries.flatMap((entry) => entry.data.tags || [])),
 ).sort((a, b) => a.localeCompare(b));
 const homeBlogFilterKey = "home-blog-filter";
+const baseUrl = import.meta.env.BASE_URL;
+const withBase = (path: string) => {
+    if (path === "/") return baseUrl;
+    return `${baseUrl}${path.replace(/^\//, "")}`;
+};
 ---
 
 <Layout title="Cangjie UK Team">
@@ -83,7 +87,7 @@ const homeBlogFilterKey = "home-blog-filter";
                                     .slice(0, 4)
                                     .map((entry, index) => (
                                         <a
-                                            href={`/news/${index}`}
+                                            href={withBase(`/news/${index}`)}
                                             class="news-item"
                                         >
                                             <span class="news-item-title">
