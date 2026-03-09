@@ -17,9 +17,9 @@ side effects in functional code without resorting to monad transformers.
 
 Before the Cangjie programming language, *effect handlers* were only found in functional-style programming languages, many of which were bespoke research projects.
 Although the Cangjie programming language is not purely functional, we believe that *effect handlers* have a place in multi-paradigm general purpose languages, just like how other ideas from functional programming have influenced mainstream languages (such as closures, algebraic data types, lazy evaluation...).
-*Effect handlers* are an upcoming experimental feature in Cangjie, but you can try it now using the [build]() of our [fork of the Cangjie SDK]().
+*Effect handlers* are an upcoming experimental feature in Cangjie, but you can try it now using the [build](https://github.com/CJPLUK/cangjie_sdk/releases) of our [fork of the Cangjie SDK](https://github.com/CJPLUK/cangjie_sdk).
 If you are involved with a research project involving *effect handlers* are are interested in using Cangjie, feel free to [reach out to us]()!
-To see it in action, check out the [tutorial]().
+To see it in action, check out the [tutorial](https://github.com/CJPLUK/effects-tutorial).
 
 ## Effect Handler Use Cases
 
@@ -171,11 +171,11 @@ while (let Some(cont) <- continuation.value) {
     resume cont with  value
 }
 ```
-A good showcase for this is the [Coroutine library]() which, among other things, allows you to write generator functions in the Cangjie programming language and use them as normal iterators.
+A good showcase for this is the [Coroutine library](https://gitcode.com/2501_94045070/cangjie_generators/tree/coordinate) which, among other things, allows you to write generator functions in the Cangjie programming language and use them as normal iterators.
 
 
 ## Effect Handler Projects
 - [tutorial](https://github.com/CJPLUK/effects-tutorial)
-- [Coroutine library]()
-- [Upload4cj fork]()
-- [Structured Concurrency]()
+- [Coroutine library](https://gitcode.com/2501_94045070/cangjie_generators/tree/coordinate)
+- [Upload4cj fork](https://gitcode.com/2501_94045070/upload4cj/tree/effects-implant)
+- [Structured Concurrency (concj)](https://gitcode.com/2501_94045070/concj)
