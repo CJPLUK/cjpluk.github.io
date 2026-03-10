@@ -22,54 +22,8 @@ A TCPCluster consists of:
 
 The following diagram illustrates the cluster architecture:
 
-```mermaid
-graph TB
-    subgraph "Client Nodes"
-        C1[Client Node 1]
-        C2[Client Node 2]
-    end
+![Distributed actors cluster architecture](../figures/actors_cluster.png)
 
-    subgraph "TCPCluster"
-        HS[Head Server<br/>Coordinates Actor Placement]
-
-        subgraph "Worker Nodes"
-            W1[Worker Node 1<br/>Hosts Actors]
-            W2[Worker Node 2<br/>Hosts Actors]
-            W3[Worker Node 3<br/>Hosts Actors]
-        end
-
-        subgraph "Actors"
-            A1(Actor: alice)
-            A2(Actor: bob)
-            A3(Actor: charlie)
-        end
-    end
-
-    HS -->|Manages| W1
-    HS -->|Manages| W2
-    HS -->|Manages| W3
-
-    C1 -->|Spawn/Lookup| HS
-    C2 -->|Spawn/Lookup| HS
-
-    W1 -.->|Hosts| A1
-    W2 -.->|Hosts| A2
-    W3 -.->|Hosts| A3
-
-    C1 -->|Communicate| A1
-    C1 -->|Communicate| A2
-    C2 -->|Communicate| A3
-
-    style HS fill:#e1f5ff
-    style W1 fill:#fff4e1
-    style W2 fill:#fff4e1
-    style W3 fill:#fff4e1
-    style C1 fill:#e8f5e9
-    style C2 fill:#e8f5e9
-    style A1 fill:#f3e5f5
-    style A2 fill:#f3e5f5
-    style A3 fill:#f3e5f5
-```
 
 ## MCP integration
 
@@ -77,14 +31,9 @@ MCP integration connects distributed actors to AI agents by exposing actor recei
 
 In the `distributed-actors-cj` workflow, this is typically done by creating an `ActorToolManager`, adding one or more `TCPActorClient` connections, and letting the tool manager surface compatible actor receivers as tools. MCP integration does not require a cluster: it can work with a single TCP actor host and client. If a cluster is present, the same MCP layer can call actors hosted through the cluster as well. This architecture keeps AI orchestration separate from stateful backend execution and allows the same actor services to be reused by both application code and agent-based clients.
 
-```mermaid
-flowchart LR
-    AG[AI Agent] -->|MCP tool call| TM[ActorToolManager]
-    TM -->|dispatch| TC[TCPActorClient]
-    TC -->|call receiver| AH[TCP Actor Host]
-    AH -->|receiver execution| AC(Distributed Actor)
-    AC -->|result| AG
-```
+The following diagram shows how a Model Context Protocol (MCP) AI agent/assistant request flows to distributed actor receivers in a typical system, when MCP integration is enabled:
+
+![Distributed actors MCP integration flow](../figures/actors_mcp_flow.png)
 
 ```cangjie
 let toolManager = ActorToolManager()
@@ -101,39 +50,9 @@ The chat room example in `distributed-actors-cj` is implemented in `examples/cha
 
 A room is represented by `ChatRoomActor`, which is spawnable and created with `TCPCluster.spawnActor<ChatRoomActor>(...)` when a user runs `open <room>`. When a user runs `join <room>`, the client looks up the room actor with `TCPCluster.getActor<ChatRoomActor>(...)` and registers its user actor via `joinRoom(userId, user)`. Sending text uses `sendMessage(userId, message, tell: True)`, and the room actor broadcasts by iterating stored `UserActor` proxies and calling `receiveMessage` on each one. The client-side `UserActorImpl` prints incoming messages and ignores messages sent by itself.
 
-```mermaid
-graph TB
-    subgraph "Chat clients"
-        subgraph CH1["Client A"]
-            UH1(UserActor: alice)
-        end
-    end
+The architecture of the chat room server in a distributed actor cluster can be visualized as follows:
 
-    subgraph "Chat room server"
-        HA[Head Server]
-
-        subgraph "Worker Nodes"
-            WK1[Worker Node 1]
-        end
-
-        subgraph "Chat Actors"
-            R1(ChatRoomActor: room-1)
-        end
-    end
-
-    CH1 -->|open/join via TCPCluster| HA
-    HA -->|place/lookup| WK1
-    WK1 -.->|hosts| R1
-
-    UH1 -->|sendMessage| R1
-    R1 -->|receiveMessage| UH1
-
-    style HA fill:#e1f5ff
-    style WK1 fill:#fff4e1
-    style CH1 fill:#e8f5e9
-    style UH1 fill:#f3e5f5
-    style R1 fill:#f3e5f5
-```
+![Distributed actors chat room server architecture](../figures/actors_chat_room_server_architecture.png)
 
 For this application, the main advantage of using an actor cluster is that each chat room has a clear ownership boundary: room membership and broadcast state live inside one `ChatRoomActor`, and all updates are serialized through actor receivers. That avoids explicit lock management for room data and makes concurrent joins, leaves, and messages easier to reason about. Clustering also provides location transparency, so clients can keep using the same proxy calls even if a room actor is placed on a different worker node, which simplifies horizontal scaling as room count and traffic grow.
 
