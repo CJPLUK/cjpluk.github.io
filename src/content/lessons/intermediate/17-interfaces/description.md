@@ -14,4 +14,4 @@ These members are abstract. Implementing types must have the corresponding imple
 
 Here any class that implements interface Ia , must declare and define function f.
 
-A class can implement multiple interfaces seperated by & as seen with class C
+A class can implement multiple interfaces separated by `&`, as shown with class `C`.

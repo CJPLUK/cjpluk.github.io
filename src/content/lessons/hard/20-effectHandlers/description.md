@@ -26,5 +26,5 @@ In addition to changing control flow, perform can return a value and resume can 
 
 
 Effect handlers have similar behaviour to exceptions when it comes to handler resolution. When we perform an effect, the runtime searches up the stack for the first
-handler than handles the type of effect we have performed. However, the resume command returns the flow of control at the point where the effect was performed rather
+handler that handles the type of effect we have performed. However, the resume command returns the flow of control at the point where the effect was performed rather
 than exit the handler as is the case with exceptions.

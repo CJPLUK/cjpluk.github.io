@@ -5,7 +5,7 @@ Iterable interface.
 
 
 User-created class that implements Iterable interface. Function iterator, returns
-an Iterator object, which we have to defined specificly for MyArray class.
+an `Iterator` object, which we have to define specifically for the `MyArray` class.
 
 
 
@@ -20,7 +20,7 @@ an Iterator object, which we have to defined specificly for MyArray class.
 
 
 
-MyArrayIter inheritcs from Iterator abstract class, and has to implement 
+`MyArrayIter` inherits from the abstract `Iterator` class, and has to implement 
 method next().
 
 
@@ -47,5 +47,5 @@ method next().
 
 
 Here we have for extended for-loops over our class MyArray. It is only possible
-because it implements iterable interface. We dont have to traverse it in order,
+because it implements the `Iterable` interface. We do not have to traverse it in order,
 we can get creative with the MyArrayIter class.

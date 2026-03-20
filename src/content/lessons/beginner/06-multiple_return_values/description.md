@@ -6,7 +6,7 @@ Return type of this function is a tuple consisting of two Ints.
 
 
 
-Using pattern matching we can decompose tuple to seperate variables of type int.
+Using pattern matching we can decompose a tuple into separate variables of type `Int64`.
 
 
-We can use the wildcard _ to match any value, if we dont need to use the value.
+We can use the wildcard `_` to match any value if we do not need to use that value.

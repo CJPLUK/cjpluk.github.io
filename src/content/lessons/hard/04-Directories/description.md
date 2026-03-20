@@ -15,11 +15,11 @@ Open current directory.
 
 Check if subDirectory "Max_is_amazing" exists.
 
-if it doesnt create it.
+If it does not exist, create it.
 
 
 
-if it does open it.
+If it does, open it.
 
 
 Create a file in the subDirectory.

@@ -2,7 +2,7 @@ Monitors
 
 Monitor is a built-in data structure that binds a mutex to a single related condition variable (wait queue). Monitor can block a thread and wait for a signal from another thread to resume execution. This mechanism uses shared variables to synchronize threads.
 
-Monitor initilization.
+Monitor initialization.
 Condition variable.
 
 
