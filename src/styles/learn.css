@@ -382,8 +382,8 @@
 }
 
 .learn-description-content code {
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo,
-        monospace;
+    font-family:
+        "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
     font-size: 0.86em;
     background: #e8f1f6;
     padding: 0.08rem 0.3rem;
@@ -407,6 +407,28 @@
     border: 1px solid #1d5964;
     background: #111827;
     box-shadow: 0 10px 24px rgba(15, 23, 42, 0.25);
+}
+
+.learn-code-panel.learn-code-panel-enter {
+    transform-origin: 72% 18%;
+    animation: learn-code-panel-enter 190ms ease-out both;
+}
+
+@keyframes learn-code-panel-enter {
+    from {
+        opacity: 0.52;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .learn-code-panel.learn-code-panel-enter {
+        animation: none;
+    }
 }
 
 .learn-code-header {
@@ -503,8 +525,8 @@
 
 .learn-code-block pre code {
     display: block;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo,
-        monospace;
+    font-family:
+        "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
     font-size: 0.88rem;
     line-height: 1.55;
     white-space: pre;

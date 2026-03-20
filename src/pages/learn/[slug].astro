@@ -192,7 +192,31 @@ const getLessonTransitionName = (
             const codeElement = document.querySelector(
                 ".learn-code-block code",
             );
+            const codePanel = document.querySelector(".learn-code-panel");
             const progressFill = document.querySelector(".learn-progress-fill");
+
+            const normalizePath = (value) => {
+                try {
+                    const path = new URL(value, window.location.origin).pathname;
+                    const trimmed = path.replace(/\/+$/, "");
+                    return trimmed.length > 0 ? trimmed : "/";
+                } catch {
+                    return "";
+                }
+            };
+
+            if (codePanel instanceof HTMLElement) {
+                const referrerPath = document.referrer
+                    ? normalizePath(document.referrer)
+                    : "";
+                const overviewPath = normalizePath(overviewHref);
+                const shouldAnimateCodePanel =
+                    referrerPath.length > 0 && referrerPath === overviewPath;
+
+                if (shouldAnimateCodePanel) {
+                    codePanel.classList.add("learn-code-panel-enter");
+                }
+            }
 
             if (copyButton instanceof HTMLButtonElement && codeElement) {
                 copyButton.addEventListener("click", async () => {
