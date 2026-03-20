@@ -458,10 +458,10 @@ a.brand-link:hover {
     display: block;
     background: white;
     padding: 2rem;
-    border-radius: 8px;
+    border-radius: 4px 8px 8px 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.2s ease;
-    border-left: 4px solid #20b2aa;
+    border-left: 5px solid #20b2aa;
     text-decoration: none;
     color: inherit;
     cursor: pointer;
