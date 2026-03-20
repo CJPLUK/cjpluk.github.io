@@ -38,3 +38,4 @@ coverage/
 # Lint / format cache
 .eslintcache
 .prettiercache
+.astro
