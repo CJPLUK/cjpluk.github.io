@@ -70,17 +70,17 @@ const nextHref = nextLesson ? withBase(`/learn/${nextLesson.slug}`) : "";
 
         <article class="learn-lesson-layout">
             <section class="learn-description-panel" aria-label="Lesson notes">
-                <h1 class="learn-topic-title">
-                    <span class="learn-topic-number">{lesson.index + 1}</span>
-                    {lesson.title}
-                </h1>
-                <p class="learn-lesson-meta">
+                <div class="learn-topic-header">
+                    <h1 class="learn-topic-title">
+                        <span class="learn-topic-number">{lesson.index + 1}</span>
+                        {lesson.title}
+                    </h1>
                     <span
                         class={`learn-difficulty learn-difficulty-${lesson.difficulty}`}
                     >
                         {formatDifficulty(lesson.difficulty)}
                     </span>
-                </p>
+                </div>
                 <div class="learn-description-content" set:html={descriptionHtml}></div>
             </section>
 

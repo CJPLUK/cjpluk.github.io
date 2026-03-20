@@ -299,9 +299,19 @@
     display: flex;
     align-items: center;
     gap: 0.7rem;
+    flex: 1;
+    min-width: 0;
     font-size: 1.7rem;
     line-height: 1.2;
     color: #0f3f4e;
+}
+
+.learn-topic-header {
+    margin-bottom: 1.05rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.8rem;
 }
 
 .learn-topic-number {
@@ -636,6 +646,10 @@
         padding-top: 1rem;
     }
 
+    .learn-shell-with-fixed-nav {
+        padding-bottom: calc(12.5rem + env(safe-area-inset-bottom));
+    }
+
     .learn-hero {
         padding: 1.6rem 1.2rem;
     }
@@ -672,6 +686,12 @@
 
     .learn-topic-title {
         font-size: 1.45rem;
+    }
+
+    .learn-topic-header {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 0.6rem;
     }
 
     .learn-actions {
