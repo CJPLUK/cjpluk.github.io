@@ -49,7 +49,11 @@ const isActive = (href: string) => {
                     class="brand-logo"
                     src={cangjieLogo.src}
                     alt="Cangjie Logo"
-                    loading="lazy"
+                    width={cangjieLogo.width}
+                    height={cangjieLogo.height}
+                    loading="eager"
+                    decoding="sync"
+                    fetchpriority="high"
                 />
             </span>
         </a>
