@@ -5,6 +5,8 @@
 }
 
 .learn-shell-with-fixed-nav {
+    display: flex;
+    flex-direction: column;
     padding-bottom: calc(8.5rem + env(safe-area-inset-bottom));
 }
 
@@ -271,13 +273,20 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 1rem;
     align-items: stretch;
+    flex: 1;
+    min-height: 0;
 }
 
 .learn-description-panel,
 .learn-code-panel {
+    display: flex;
+    flex-direction: column;
     border-radius: 18px;
     padding: 1.2rem;
     min-height: 420px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .learn-description-panel {
@@ -319,15 +328,17 @@
 }
 
 .learn-description-content {
+    flex: 1;
+    min-height: 0;
     border-radius: 12px;
     border: 1px solid #e4f0ef;
     background: #f8fbfd;
     padding: 1rem;
     line-height: 1.65;
     color: #3f5260;
-    overflow-wrap: break-word;
+    overflow-wrap: normal;
     max-height: 62vh;
-    overflow-y: auto;
+    overflow: auto;
 }
 
 .learn-description-content > * + * {
@@ -430,6 +441,8 @@
 }
 
 .learn-code-block {
+    flex: 1;
+    min-height: 0;
     margin: 0;
     max-height: 62vh;
     overflow: auto;
@@ -479,6 +492,28 @@
     font-size: 0.88rem;
     line-height: 1.55;
     white-space: pre;
+}
+
+.learn-code-block pre code {
+    counter-reset: learn-line;
+}
+
+.learn-code-block pre code .line {
+    display: inline-block;
+    width: 100%;
+}
+
+.learn-code-block pre code .line::before {
+    counter-increment: learn-line;
+    content: counter(learn-line);
+    display: inline-block;
+    width: 1.6em;
+    margin-right: 0.5em;
+    color: #6b7a90;
+    text-align: right;
+    user-select: none;
+    opacity: 0.85;
+    font-variant-numeric: tabular-nums;
 }
 
 .learn-navigation {
@@ -551,18 +586,48 @@
 }
 
 @media (max-width: 980px) {
+    .learn-shell-with-fixed-nav {
+        display: block;
+    }
+
     .learn-lesson-layout {
         grid-template-columns: 1fr;
+        display: grid;
     }
 
     .learn-description-panel,
     .learn-code-panel {
-        min-height: 320px;
+        display: block;
+        min-height: auto;
     }
 
     .learn-description-content,
     .learn-code-block {
-        max-height: 45vh;
+        max-height: none;
+        overflow-y: visible;
+    }
+
+    .learn-description-content {
+        overflow-x: auto;
+    }
+}
+
+@media (min-width: 981px) {
+    .learn-shell-with-fixed-nav {
+        height: calc(100dvh - 64px);
+        overflow: hidden;
+        padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+    }
+
+    .learn-description-panel,
+    .learn-code-panel {
+        min-height: 0;
+        height: 100%;
+    }
+
+    .learn-description-content,
+    .learn-code-block {
+        max-height: none;
     }
 }
 
