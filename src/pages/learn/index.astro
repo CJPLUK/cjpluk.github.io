@@ -1,5 +1,5 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getLessons } from "../../lib/learn";
 import "../../styles/learn.css";
 
@@ -23,14 +23,16 @@ const getLessonTransitionName = (
 ) => `learn-${part}-${slug}`;
 ---
 
-<Layout
+<BaseLayout
     title="Learn Cangjie — The Cangjie Programming Language UK Team"
     description="Browse statically generated Cangjie lessons with explanations and runnable code samples."
 >
     <main class="container learn-shell">
-        <header class="learn-hero">
-            <h1>Learn Cangjie</h1>
-            <p>Master the modern programming language step by step.</p>
+        <header class="hero-section">
+            <h1 class="main-title">Learn Cangjie</h1>
+            <p class="subtitle">
+                Master the modern programming language step by step.
+            </p>
         </header>
 
         <section
@@ -157,4 +159,4 @@ const getLessonTransitionName = (
             });
         })();
     </script>
-</Layout>
+</BaseLayout>

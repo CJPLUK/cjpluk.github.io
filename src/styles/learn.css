@@ -1,6 +1,6 @@
 .learn-shell {
     max-width: 1400px;
-    padding-top: 1.5rem;
+
     padding-bottom: 3rem;
 }
 
@@ -670,10 +670,6 @@
 }
 
 @media (max-width: 760px) {
-    .learn-shell {
-        padding-top: 1rem;
-    }
-
     .learn-shell-with-fixed-nav {
         padding-bottom: calc(12.5rem + env(safe-area-inset-bottom));
     }
