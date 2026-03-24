@@ -264,7 +264,6 @@ const withBase = (path: string) => {
 
             const namespace = "cangjie-programming-language-uk-team";
             const key = "home-total-visits";
-            const providers = ["https://countapi.xyz", "https://api.countapi.xyz"];
             const lastCountDateKey = "visit-last-count-date";
             const localCountKey = "home-total-visits-fallback";
             const lastRemoteValueKey = "home-total-visits-last-remote";
@@ -313,15 +312,25 @@ const withBase = (path: string) => {
                 return parseCounterApiValue(getPayload);
             };
 
-            const requestCount = async (base, action) => {
-                const url = `${base}/${action}/${namespace}/${key}`;
-                const res = await fetch(url, { cache: "no-store" });
-                if (!res.ok) throw new Error("counter request failed");
-                const data = await res.json();
-                if (!data || typeof data.value !== "number") {
-                    throw new Error("invalid counter response");
+            const requestCounterApiV1 = async (action) => {
+                if (action === "hit") {
+                    const upUrl = `https://api.counterapi.dev/v1/${namespace}/${key}/up?ts=${Date.now()}`;
+                    const upRes = await fetch(upUrl, { cache: "no-store" });
+                    if (!upRes.ok) throw new Error("counterapi v1 request failed");
+                    const upData = await upRes.json();
+                    if (!upData || typeof upData.count !== "number") {
+                        throw new Error("invalid counterapi v1 response");
+                    }
                 }
-                return data.value;
+
+                const getUrl = `https://api.counterapi.dev/v1/${namespace}/${key}?ts=${Date.now()}`;
+                const getRes = await fetch(getUrl, { cache: "no-store" });
+                if (!getRes.ok) throw new Error("counterapi v1 request failed");
+                const getData = await getRes.json();
+                if (!getData || typeof getData.count !== "number") {
+                    throw new Error("invalid counterapi v1 response");
+                }
+                return getData.count;
             };
 
             const getLocalFallback = (increment) => {
@@ -354,21 +363,19 @@ const withBase = (path: string) => {
                     el.textContent = value.toLocaleString("en-GB");
                     return;
                 } catch {
-                    // Fall through to countapi providers.
+                    // Fall through to CounterAPI v1 fallback.
                 }
 
-                for (const base of providers) {
-                    try {
-                        const value = await requestCount(base, action);
-                        if (shouldIncrement) {
-                            window.localStorage.setItem(lastCountDateKey, today);
-                        }
-                        setLastRemoteValue(value);
-                        el.textContent = value.toLocaleString("en-GB");
-                        return;
-                    } catch {
-                        // Try the next counter provider.
+                try {
+                    const value = await requestCounterApiV1(action);
+                    if (shouldIncrement) {
+                        window.localStorage.setItem(lastCountDateKey, today);
                     }
+                    setLastRemoteValue(value);
+                    el.textContent = value.toLocaleString("en-GB");
+                    return;
+                } catch {
+                    // Fall through to local fallback.
                 }
 
                 const fallbackValue = getLocalFallback(shouldIncrement);
