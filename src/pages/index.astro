@@ -34,6 +34,8 @@ const allTags = Array.from(
     new Set(blogEntries.flatMap((entry) => entry.data.tags || [])),
 ).sort((a, b) => a.localeCompare(b));
 const homeBlogFilterKey = "home-blog-filter";
+const counterApiWorkspace =
+    import.meta.env.PUBLIC_COUNTERAPI_WORKSPACE || "cjpluk";
 const baseUrl = import.meta.env.BASE_URL;
 const withBase = (path: string) => {
     if (path === "/") return baseUrl;
@@ -145,6 +147,11 @@ const withBase = (path: string) => {
                         </ul>
                     </section>
 
+                    <section class="sidebar-card visit-card" aria-label="Total visits">
+                        <h3>Total Visits</h3>
+                        <p id="total-visits" class="visit-value">...</p>
+                    </section>
+
                     <a
                         class="sidebar-card tech-talk-card"
                         href="https://www.youtube.com/watch?v=_pKV0zqoeZQ&feature=youtu.be"
@@ -250,6 +257,132 @@ const withBase = (path: string) => {
             </div>
         </main>
     </div>
+    <script is:inline define:vars={{ counterApiWorkspace }}>
+        (() => {
+            const el = document.getElementById("total-visits");
+            if (!el) return;
+
+            const namespace = "cangjie-programming-language-uk-team";
+            const key = "home-total-visits";
+            const providers = ["https://countapi.xyz", "https://api.countapi.xyz"];
+            const lastCountDateKey = "visit-last-count-date";
+            const localCountKey = "home-total-visits-fallback";
+            const lastRemoteValueKey = "home-total-visits-last-remote";
+            const today = new Date().toISOString().slice(0, 10);
+
+            const parseCounterApiValue = (payload) => {
+                const data = payload?.data;
+                if (!data) throw new Error("invalid counterapi response");
+
+                if (typeof data.count === "number") return data.count;
+                if (
+                    typeof data.up_count === "number" &&
+                    typeof data.down_count === "number"
+                ) {
+                    return data.up_count - data.down_count;
+                }
+                if (typeof data.up_count === "number") return data.up_count;
+                throw new Error("counterapi response missing numeric count");
+            };
+
+            const setLastRemoteValue = (value) => {
+                try {
+                    window.localStorage.setItem(lastRemoteValueKey, String(value));
+                } catch {
+                    // ignore storage write errors
+                }
+            };
+
+            const requestCounterApi = async (action) => {
+                if (!counterApiWorkspace) {
+                    throw new Error("counterapi workspace not configured");
+                }
+
+                if (action === "hit") {
+                    const upUrl = `https://api.counterapi.dev/v2/${counterApiWorkspace}/${key}/up?ts=${Date.now()}`;
+                    const upRes = await fetch(upUrl, { cache: "no-store" });
+                    if (!upRes.ok) throw new Error("counterapi request failed");
+                    const upPayload = await upRes.json();
+                    parseCounterApiValue(upPayload);
+                }
+
+                const getUrl = `https://api.counterapi.dev/v2/${counterApiWorkspace}/${key}?ts=${Date.now()}`;
+                const getRes = await fetch(getUrl, { cache: "no-store" });
+                if (!getRes.ok) throw new Error("counterapi request failed");
+                const getPayload = await getRes.json();
+                return parseCounterApiValue(getPayload);
+            };
+
+            const requestCount = async (base, action) => {
+                const url = `${base}/${action}/${namespace}/${key}`;
+                const res = await fetch(url, { cache: "no-store" });
+                if (!res.ok) throw new Error("counter request failed");
+                const data = await res.json();
+                if (!data || typeof data.value !== "number") {
+                    throw new Error("invalid counter response");
+                }
+                return data.value;
+            };
+
+            const getLocalFallback = (increment) => {
+                let current = 0;
+                try {
+                    current = Number(window.localStorage.getItem(localCountKey) || "0");
+                    if (!Number.isFinite(current)) current = 0;
+                    if (increment) {
+                        current += 1;
+                        window.localStorage.setItem(localCountKey, String(current));
+                        window.localStorage.setItem(lastCountDateKey, today);
+                    }
+                } catch {
+                    if (increment) current += 1;
+                }
+                return current;
+            };
+
+            (async () => {
+                const lastCountDate = window.localStorage.getItem(lastCountDateKey) || "";
+                const shouldIncrement = lastCountDate !== today;
+                const action = shouldIncrement ? "hit" : "get";
+
+                try {
+                    const value = await requestCounterApi(action);
+                    if (shouldIncrement) {
+                        window.localStorage.setItem(lastCountDateKey, today);
+                    }
+                    setLastRemoteValue(value);
+                    el.textContent = value.toLocaleString("en-GB");
+                    return;
+                } catch {
+                    // Fall through to countapi providers.
+                }
+
+                for (const base of providers) {
+                    try {
+                        const value = await requestCount(base, action);
+                        if (shouldIncrement) {
+                            window.localStorage.setItem(lastCountDateKey, today);
+                        }
+                        setLastRemoteValue(value);
+                        el.textContent = value.toLocaleString("en-GB");
+                        return;
+                    } catch {
+                        // Try the next counter provider.
+                    }
+                }
+
+                const fallbackValue = getLocalFallback(shouldIncrement);
+                const lastRemoteValue = Number(
+                    window.localStorage.getItem(lastRemoteValueKey) || "",
+                );
+                if (Number.isFinite(lastRemoteValue) && lastRemoteValue > 0) {
+                    el.textContent = lastRemoteValue.toLocaleString("en-GB");
+                    return;
+                }
+                el.textContent = fallbackValue.toLocaleString("en-GB");
+            })();
+        })();
+    </script>
     <script is:inline define:vars={{ homeBlogFilterKey }}>
         (() => {
             const chips = Array.from(

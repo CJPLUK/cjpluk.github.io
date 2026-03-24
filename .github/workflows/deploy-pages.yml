@@ -37,6 +37,8 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Build Astro site
+        env:
+          PUBLIC_COUNTERAPI_WORKSPACE: cjpluk
         run: npm run build
 
       - name: Setup Pages

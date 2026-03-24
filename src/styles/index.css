@@ -745,6 +745,31 @@ a.brand-link:hover {
     color: #6c757d;
 }
 
+.visit-card {
+    background: linear-gradient(135deg, #f6fffd 0%, #ffffff 70%);
+    border-color: #cfece7;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.visit-card h3 {
+    margin-bottom: 0;
+}
+
+.visit-value {
+    margin: 0;
+    font-size: 2.2rem;
+    line-height: 1;
+    font-weight: 700;
+    color: #0f766e;
+    letter-spacing: 0.2px;
+    margin-left: 1rem;
+    text-align: right;
+    flex-shrink: 0;
+}
+
 .community-card p {
     margin-bottom: 1rem;
 }
